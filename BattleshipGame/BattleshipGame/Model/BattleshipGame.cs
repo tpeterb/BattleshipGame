@@ -33,6 +33,10 @@ namespace BattleshipGame.Model
 
         public string PlayerNameToMove { get; protected set; }
 
+        public bool SinkingAtPreviousHitOfPlayerOne { get; protected set; }
+
+        public bool SinkingAtPreviousHitOfPlayerTwo { get; protected set; }
+
         protected BattleshipGame()
         {
             PlayerOneHits = 0;
@@ -74,7 +78,11 @@ namespace BattleshipGame.Model
                 if (ShotHitsAShip(PlayerTwoCurrentShips, positionToShootAt))
                 {
                     PlayerOneHits++;
+                    SinkingAtPreviousHitOfPlayerOne = true;
                     DestroyShipPart(PlayerTwoCurrentShips, positionToShootAt);
+                } else
+                {
+                    SinkingAtPreviousHitOfPlayerOne = false;
                 }
             } else if (playerToShoot.PlayerName == PlayerTwo.PlayerName)
             {
@@ -82,7 +90,11 @@ namespace BattleshipGame.Model
                 if (ShotHitsAShip(PlayerOneCurrentShips, positionToShootAt))
                 {
                     PlayerTwoHits++;
+                    SinkingAtPreviousHitOfPlayerTwo = true;
                     DestroyShipPart(PlayerOneCurrentShips, positionToShootAt);
+                } else
+                {
+                    SinkingAtPreviousHitOfPlayerTwo = false;
                 }
             }
             NumberOfTurns++;

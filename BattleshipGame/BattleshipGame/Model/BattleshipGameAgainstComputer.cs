@@ -19,7 +19,53 @@ namespace BattleshipGame.Model
             DetermineStartingPlayer();
         }
 
+        public Position CreateComputerShot()
+        {
+            if (!SinkingAtPreviousHitOfPlayerTwo)
+            {
+                return CreateRandomComputerShot();
+            } else
+            {
+                return CreateComputerShotNextToPreviousHit();
+            }
+        }
 
+        private Position CreateRandomComputerShot()
+        {
+            Position positionToShootAt;
+            Random random = new Random();
+            do {
+                positionToShootAt = new Position(random.Next(0, BattleshipGame.BoardSize), random.Next(0, BattleshipGame.BoardSize));
+            } while (PlayerTwoGuesses.Contains(positionToShootAt));
+            return positionToShootAt;
+        }
+
+        private Position CreateComputerShotNextToPreviousHit()
+        {
+            Position positionToShootAt;
+            Position lastComputerTarget = PlayerTwoGuesses.Last();
+            Random random = new Random();
+            do
+            {
+                int randomResult = random.Next(1, 5);
+                // The square above the previous hit
+                if (randomResult == 1)
+                {
+                    positionToShootAt = new Position(lastComputerTarget.Row - 1, lastComputerTarget.Column);
+                } else if (randomResult == 2) // The square below the previous hit
+                {
+                    positionToShootAt = new Position(lastComputerTarget.Row + 1, lastComputerTarget.Column);
+                } else if (randomResult == 3) // The square to the right of the previous hit
+                {
+                    positionToShootAt = new Position(lastComputerTarget.Row, lastComputerTarget.Column + 1);
+                } else // The square to the left of the previous hit
+                {
+                    positionToShootAt = new Position(lastComputerTarget.Row, lastComputerTarget.Column - 1);
+                }
+            } while (!IsPositionValid(positionToShootAt)
+                     || PlayerTwoGuesses.Contains(positionToShootAt));
+            return positionToShootAt;
+        }
 
         private void DetermineStartingPlayer()
         {
