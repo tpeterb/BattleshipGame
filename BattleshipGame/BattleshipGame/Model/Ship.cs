@@ -29,7 +29,7 @@ namespace BattleshipGame.Model
             ShipPositions = new List<Position>();
             foreach (var position in shipPositions)
             {
-                if (IsShipPositionValid(position))
+                if (BattleshipGame.IsPositionValid(position))
                 {
                     ShipPositions.Add(position);
                 } else
@@ -57,13 +57,15 @@ namespace BattleshipGame.Model
             }
         }
 
-        private bool IsShipPositionValid(Position shipPosition)
+        public Ship(Ship ship)
         {
-            return shipPosition.Row >= 0
-                && shipPosition.Column >= 0
-                && shipPosition.Row < BattleshipGame.BoardSize
-                && shipPosition.Column < BattleshipGame.BoardSize;
+            this.TypeOfShip = ship.TypeOfShip;
+            this.ShipSize = ship.ShipSize;
+            this.ShipPositions = new List<Position>();
+            foreach (var position in ship.ShipPositions)
+            {
+                this.ShipPositions.Add(new Position(position));
+            }
         }
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BattleshipGame.Model
@@ -18,28 +19,94 @@ namespace BattleshipGame.Model
 
         public Player PlayerTwo { get; set; }
 
+        public List<Ship> PlayerOneOriginalShips { get; set; }
 
-        private List<Ship> _playerOneShips;
+        public List<Ship> PlayerOneCurrentShips { get; set; }
 
-        private List<Position> _playerOneGuesses;
+        public List<Position> PlayerOneGuesses { get; set; }
 
-        private List<Ship> _playerTwoShips;
+        public List<Ship> PlayerTwoOriginalShips { get; set; }
 
-        private List<Position> _playerTwoGuesses;
+        public List<Ship> PlayerTwoCurrentShips { get; set; }
 
-        public string playerNameToMove { get; set; }
+        public List<Position> PlayerTwoGuesses { get; set; }
 
-        protected BattleshipGame(Player playerOne, Player playerTwo, List<Ship> playerOneShips, List<Ship> playerTwoShips)
+        public string PlayerNameToMove { get; protected set; }
+
+        protected BattleshipGame()
         {
-            PlayerOne = playerOne;
-            PlayerTwo = playerTwo;
-            _playerOneShips = playerOneShips;
-            _playerTwoShips = playerTwoShips;
             PlayerOneHits = 0;
             PlayerTwoHits = 0;
             NumberOfTurns = 0;
-            _playerOneGuesses = new List<Position>();
-            _playerTwoGuesses = new List<Position>();
+            PlayerOneGuesses = new List<Position>();
+            PlayerTwoGuesses = new List<Position>();
+        }
+
+        protected BattleshipGame(Player playerOne, Player playerTwo, List<Ship> playerOneShips, List<Ship> playerTwoShips)
+            : this()
+        {
+            PlayerOne = playerOne;
+            PlayerTwo = playerTwo;
+            PlayerOneOriginalShips = playerOneShips;
+            PlayerTwoOriginalShips = playerTwoShips;
+            PlayerOneCurrentShips = playerOneShips.Select(ship => new Ship(ship)).ToList();
+            PlayerTwoCurrentShips = playerTwoShips.Select(ship => new Ship(ship)).ToList();
+        }
+
+        public void MakeShot(Player playerToShoot, Position positionToShootAt)
+        {
+            if (!IsPositionValid(positionToShootAt))
+            {
+                throw new ArgumentException("Shooting at a position that's not present on the board!");
+            }
+            if (CanMakeShot(playerToShoot, positionToShootAt))
+            {
+                
+                ChangePlayerNameToMove();
+            }
+        }
+
+        private bool CanMakeShot(Player playerToShoot, Position positionToShootAt)
+        {
+            if (playerToShoot.PlayerName != PlayerNameToMove)
+            {
+                return false;
+            }
+            if (playerToShoot.PlayerName == PlayerOne.PlayerName)
+            {
+                if (PlayerOneGuesses.Contains(positionToShootAt))
+                {
+                    return false;
+                }
+                return true;
+            } else if (playerToShoot.PlayerName == PlayerTwo.PlayerName)
+            {
+                if (PlayerTwoGuesses.Contains(positionToShootAt))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private void ChangePlayerNameToMove()
+        {
+            if (PlayerNameToMove == PlayerOne.PlayerName)
+            {
+                PlayerNameToMove = PlayerTwo.PlayerName;
+            } else
+            {
+                PlayerNameToMove = PlayerOne.PlayerName;
+            }
+        }
+
+        public static bool IsPositionValid(Position position)
+        {
+            return position.Row >= 0
+                && position.Column >= 0
+                && position.Row < BoardSize
+                && position.Column < BoardSize;
         }
 
     }
