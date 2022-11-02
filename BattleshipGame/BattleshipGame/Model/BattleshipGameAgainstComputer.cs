@@ -30,6 +30,11 @@ namespace BattleshipGame.Model
             }
         }
 
+        public List<Ship> GetComputerShips()
+        {
+            return PlayerTwoOriginalShips;
+        }
+
         private Position CreateRandomComputerShot()
         {
             Position positionToShootAt;

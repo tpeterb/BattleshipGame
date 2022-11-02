@@ -37,6 +37,8 @@ namespace BattleshipGame.Model
 
         public bool SinkingAtPreviousHitOfPlayerTwo { get; protected set; }
 
+        public string WinnerPlayerName { get; protected set; }
+
         protected BattleshipGame()
         {
             PlayerOneHits = 0;
@@ -44,6 +46,7 @@ namespace BattleshipGame.Model
             NumberOfTurns = 0;
             PlayerOneGuesses = new List<Position>();
             PlayerTwoGuesses = new List<Position>();
+            WinnerPlayerName = "";
         }
 
         protected BattleshipGame(Player playerOne, Player playerTwo, List<Ship> playerOneShips, List<Ship> playerTwoShips)
@@ -135,6 +138,35 @@ namespace BattleshipGame.Model
                         return true;
                     }
                 }
+            }
+            return false;
+        }
+
+        public bool IsGameOver()
+        {            
+            if (IsPlayerOneWinning() || isPlayerTwoWinning())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool IsPlayerOneWinning()
+        {
+            List<bool> PlayerTwoShipDestroyedStates = PlayerTwoCurrentShips.Select(ship => ship.Destroyed).ToList();
+            if (!PlayerTwoShipDestroyedStates.Contains(false))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool isPlayerTwoWinning()
+        {
+            List<bool> PlayerOneShipDestroyedStates = PlayerOneCurrentShips.Select(ship => ship.Destroyed).ToList();
+            if (!PlayerOneShipDestroyedStates.Contains(false))
+            {
+                return true;
             }
             return false;
         }
