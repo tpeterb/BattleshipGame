@@ -19,6 +19,8 @@ namespace BattleshipGame.Model
             DetermineStartingPlayer();
         }
 
+
+
         private void DetermineStartingPlayer()
         {
             Random random = new Random();

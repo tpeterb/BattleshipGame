@@ -61,12 +61,34 @@ namespace BattleshipGame.Model
             }
             if (CanMakeShot(playerToShoot, positionToShootAt))
             {
-                
+                ProcessShot(playerToShoot, positionToShootAt);
                 ChangePlayerNameToMove();
             }
         }
 
-        private bool CanMakeShot(Player playerToShoot, Position positionToShootAt)
+        protected void ProcessShot(Player playerToShoot, Position positionToShootAt)
+        {
+            if (playerToShoot.PlayerName == PlayerOne.PlayerName)
+            {
+                PlayerOneGuesses.Add(positionToShootAt);
+                if (ShotHitsAShip(PlayerTwoCurrentShips, positionToShootAt))
+                {
+                    PlayerOneHits++;
+                    DestroyShipPart(PlayerTwoCurrentShips, positionToShootAt);
+                }
+            } else if (playerToShoot.PlayerName == PlayerTwo.PlayerName)
+            {
+                PlayerTwoGuesses.Add(positionToShootAt);
+                if (ShotHitsAShip(PlayerOneCurrentShips, positionToShootAt))
+                {
+                    PlayerTwoHits++;
+                    DestroyShipPart(PlayerOneCurrentShips, positionToShootAt);
+                }
+            }
+            NumberOfTurns++;
+        }
+
+        protected bool CanMakeShot(Player playerToShoot, Position positionToShootAt)
         {
             if (playerToShoot.PlayerName != PlayerNameToMove)
             {
@@ -90,7 +112,41 @@ namespace BattleshipGame.Model
             return false;
         }
 
-        private void ChangePlayerNameToMove()
+        protected bool ShotHitsAShip(List<Ship> shipsToCheckForHit, Position positionToShootAt)
+        {
+            foreach (var ship in shipsToCheckForHit)
+            {
+                foreach (var position in ship.ShipPositions)
+                {
+                    if (position == positionToShootAt)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        protected void DestroyShipPart(List<Ship> shipsAmongWhichToDestroyAShipPart, Position shipPartToDestroy)
+        {
+            foreach (var ship in shipsAmongWhichToDestroyAShipPart)
+            {
+                for (int i = 0; i < ship.ShipPositions.Count; i++)
+                {
+                    if (ship.ShipPositions.ElementAt(i) == shipPartToDestroy)
+                    {
+                        ship.ShipPositions.RemoveAt(i);
+                        if (ship.GetCurrentShipSize() == 0)
+                        {
+                            ship.Destroyed = true;
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
+        protected void ChangePlayerNameToMove()
         {
             if (PlayerNameToMove == PlayerOne.PlayerName)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BattleshipGame.Model
@@ -21,12 +22,15 @@ namespace BattleshipGame.Model
 
         public List<Position> ShipPositions { get; set; }
 
-        public int ShipSize { get; private set; }
+        public int OriginalShipSize { get; private set; }
+
+        public bool Destroyed { get; set; }
 
         public Ship(ShipType shipType, List<Position> shipPositions)
         {
             TypeOfShip = shipType;
             ShipPositions = new List<Position>();
+            Destroyed = false;
             foreach (var position in shipPositions)
             {
                 if (BattleshipGame.IsPositionValid(position))
@@ -40,19 +44,19 @@ namespace BattleshipGame.Model
             switch (shipType)
             {
                 case ShipType.AircraftCarrier:
-                    ShipSize = AircraftCarrierSize;
+                    OriginalShipSize = AircraftCarrierSize;
                     break;
                 case ShipType.Battleship:
-                    ShipSize = BattleshipSize;
+                    OriginalShipSize = BattleshipSize;
                     break;
                 case ShipType.Cruiser:
-                    ShipSize = CruiserSize;
+                    OriginalShipSize = CruiserSize;
                     break;
                 case ShipType.Submarine:
-                    ShipSize = SubmarineSize;
+                    OriginalShipSize = SubmarineSize;
                     break;
                 case ShipType.Destroyer:
-                    ShipSize = DestroyerSize;
+                    OriginalShipSize = DestroyerSize;
                     break;
             }
         }
@@ -60,12 +64,14 @@ namespace BattleshipGame.Model
         public Ship(Ship ship)
         {
             this.TypeOfShip = ship.TypeOfShip;
-            this.ShipSize = ship.ShipSize;
-            this.ShipPositions = new List<Position>();
-            foreach (var position in ship.ShipPositions)
-            {
-                this.ShipPositions.Add(new Position(position));
-            }
+            this.OriginalShipSize = ship.OriginalShipSize;
+            this.ShipPositions = ship.ShipPositions.Select(position => new Position(position)).ToList();
+            this.Destroyed = ship.Destroyed;
+        }
+
+        public int GetCurrentShipSize()
+        {
+            return ShipPositions.Count;
         }
     }
 }
