@@ -73,5 +73,28 @@ namespace BattleshipGame.Model
         {
             return ShipPositions.Count;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            Ship other = obj as Ship;
+            return (other != null)
+                && TypeOfShip == other.TypeOfShip
+                && Destroyed == other.Destroyed
+                && OriginalShipSize == other.OriginalShipSize
+                && ShipPositions.SequenceEqual(other.ShipPositions);
+        }
+
+        public override int GetHashCode()
+        {
+            return (TypeOfShip, ShipPositions, OriginalShipSize, Destroyed).GetHashCode();
+        }
     }
 }

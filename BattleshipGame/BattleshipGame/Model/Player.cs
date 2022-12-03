@@ -38,5 +38,26 @@ namespace BattleshipGame.Model
             }
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            Player other = obj as Player;
+            return (other != null)
+                && TypeOfPlayer == other.TypeOfPlayer
+                && PlayerName == other.PlayerName;
+        }
+
+        public override int GetHashCode()
+        {
+            return (TypeOfPlayer, PlayerName).GetHashCode();
+        }
     }
 }

@@ -31,13 +31,13 @@ namespace BattleshipGame.Model
 
         public List<Position> PlayerTwoGuesses { get; set; }
 
-        public string PlayerNameToMove { get; protected set; }
+        public string PlayerNameToMove { get; set; }
 
-        public bool SinkingAtPreviousHitOfPlayerOne { get; protected set; }
+        public bool SinkingAtPreviousHitOfPlayerOne { get; set; }
 
-        public bool SinkingAtPreviousHitOfPlayerTwo { get; protected set; }
+        public bool SinkingAtPreviousHitOfPlayerTwo { get; set; }
 
-        public string WinnerPlayerName { get; protected set; }
+        public string WinnerPlayerName { get; set; }
 
         protected BattleshipGame()
         {
@@ -144,7 +144,7 @@ namespace BattleshipGame.Model
 
         public bool IsGameOver()
         {            
-            if (IsPlayerOneWinning() || isPlayerTwoWinning())
+            if (IsPlayerOneWinning() || IsPlayerTwoWinning())
             {
                 return true;
             }
@@ -161,7 +161,7 @@ namespace BattleshipGame.Model
             return false;
         }
 
-        public bool isPlayerTwoWinning()
+        public bool IsPlayerTwoWinning()
         {
             List<bool> PlayerOneShipDestroyedStates = PlayerOneCurrentShips.Select(ship => ship.Destroyed).ToList();
             if (!PlayerOneShipDestroyedStates.Contains(false))
@@ -207,6 +207,57 @@ namespace BattleshipGame.Model
                 && position.Column >= 0
                 && position.Row < BoardSize
                 && position.Column < BoardSize;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (this == obj)
+            {
+                return true;
+            }
+            if (!(obj is BattleshipGame))
+            {
+                return false;
+            }
+            var other = (BattleshipGame)obj;
+            return PlayerOneHits == other.PlayerOneHits
+                && PlayerTwoHits == other.PlayerTwoHits
+                && NumberOfTurns == other.NumberOfTurns
+                && PlayerOne.Equals(other.PlayerOne)
+                && PlayerTwo.Equals(other.PlayerTwo)
+                && PlayerOneOriginalShips.SequenceEqual(other.PlayerOneOriginalShips)
+                && PlayerOneCurrentShips.SequenceEqual(other.PlayerOneCurrentShips)
+                && PlayerOneGuesses.SequenceEqual(other.PlayerOneGuesses)
+                && PlayerTwoOriginalShips.SequenceEqual(other.PlayerTwoOriginalShips)
+                && PlayerTwoCurrentShips.SequenceEqual(other.PlayerTwoCurrentShips)
+                && PlayerTwoGuesses.SequenceEqual(other.PlayerTwoGuesses)
+                && PlayerNameToMove == other.PlayerNameToMove
+                && SinkingAtPreviousHitOfPlayerOne == other.SinkingAtPreviousHitOfPlayerOne
+                && SinkingAtPreviousHitOfPlayerTwo == other.SinkingAtPreviousHitOfPlayerTwo
+                && WinnerPlayerName == other.WinnerPlayerName;
+        }
+
+        public override int GetHashCode()
+        {
+            return (PlayerOneHits,
+                PlayerTwoHits,
+                NumberOfTurns,
+                PlayerOne,
+                PlayerTwo,
+                PlayerNameToMove,
+                PlayerOneOriginalShips,
+                PlayerOneCurrentShips,
+                PlayerOneGuesses,
+                PlayerTwoOriginalShips,
+                PlayerTwoCurrentShips,
+                PlayerTwoGuesses,
+                SinkingAtPreviousHitOfPlayerOne,
+                SinkingAtPreviousHitOfPlayerTwo,
+                WinnerPlayerName).GetHashCode();
         }
 
     }
