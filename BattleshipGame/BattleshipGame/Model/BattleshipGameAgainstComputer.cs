@@ -52,20 +52,20 @@ namespace BattleshipGame.Model
             Random random = new Random();
             do
             {
-                int randomResult = random.Next(1, 5);
+                Direction direction = (Direction)random.Next(0, 4);
                 // The square above the previous hit
-                if (randomResult == 1)
+                if (direction == Direction.Up)
                 {
-                    positionToShootAt = new Position(lastComputerTarget.Row - 1, lastComputerTarget.Column);
-                } else if (randomResult == 2) // The square below the previous hit
+                    positionToShootAt = lastComputerTarget.GetPositionInDirection(Direction.Up);
+                } else if (direction == Direction.Right) // The square below the previous hit
                 {
-                    positionToShootAt = new Position(lastComputerTarget.Row + 1, lastComputerTarget.Column);
-                } else if (randomResult == 3) // The square to the right of the previous hit
+                    positionToShootAt = lastComputerTarget.GetPositionInDirection(Direction.Right);
+                } else if (direction == Direction.Down) // The square to the right of the previous hit
                 {
-                    positionToShootAt = new Position(lastComputerTarget.Row, lastComputerTarget.Column + 1);
+                    positionToShootAt = lastComputerTarget.GetPositionInDirection(Direction.Down);
                 } else // The square to the left of the previous hit
                 {
-                    positionToShootAt = new Position(lastComputerTarget.Row, lastComputerTarget.Column - 1);
+                    positionToShootAt = lastComputerTarget.GetPositionInDirection(Direction.Left);
                 }
             } while (!IsPositionValid(positionToShootAt)
                      || PlayerTwoGuesses.Contains(positionToShootAt));

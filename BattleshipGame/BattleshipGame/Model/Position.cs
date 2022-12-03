@@ -22,6 +22,18 @@ namespace BattleshipGame.Model
             this.Column = position.Column;
         }
 
+        public Position GetPositionInDirection(Direction direction)
+        {
+            return direction switch
+            {
+                Direction.Up => new Position(Row - 1, Column),
+                Direction.Down => new Position(Row + 1, Column),
+                Direction.Right => new Position(Row, Column + 1),
+                Direction.Left => new Position(Row, Column - 1),
+                _ => new Position(-1, -1)
+            };
+        }
+
         public static bool operator==(Position a, Position b)
         {
             return a.Row == b.Row && a.Column == b.Column;
