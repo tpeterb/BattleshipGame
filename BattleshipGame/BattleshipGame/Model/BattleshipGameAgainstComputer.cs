@@ -26,6 +26,18 @@ namespace BattleshipGame.Model
                 return CreateRandomComputerShot();
             } else
             {
+                Position lastComputerTarget = PlayerTwoGuesses.Last();
+                Position positionToTheLeftOfPreviousTarget = lastComputerTarget.GetPositionInDirection(Direction.Left);
+                Position positionToTheRightOfPreviousTarget = lastComputerTarget.GetPositionInDirection(Direction.Right);
+                Position positionAboveThePreviousTarget = lastComputerTarget.GetPositionInDirection(Direction.Up);
+                Position positionBelowThePreviousTarget = lastComputerTarget.GetPositionInDirection(Direction.Down);
+                if (PlayerTwoGuesses.Contains(positionToTheLeftOfPreviousTarget)
+                && PlayerTwoGuesses.Contains(positionToTheRightOfPreviousTarget)
+                && PlayerTwoGuesses.Contains(positionAboveThePreviousTarget)
+                && PlayerTwoGuesses.Contains(positionBelowThePreviousTarget))
+                {
+                    return CreateRandomComputerShot();
+                }
                 return CreateComputerShotNextToPreviousHit();
             }
         }
@@ -49,7 +61,7 @@ namespace BattleshipGame.Model
         {
             Position positionToShootAt;
             Position lastComputerTarget = PlayerTwoGuesses.Last();
-            Random random = new Random();
+            Random random = new Random();       
             do
             {
                 Direction direction = (Direction)random.Next(0, 4);

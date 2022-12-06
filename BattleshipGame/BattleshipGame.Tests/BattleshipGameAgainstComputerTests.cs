@@ -127,5 +127,81 @@ namespace BattleshipGame.Tests
 
         }
 
+        [TestMethod]
+        public void CreateComputerShot_ThePreviousComputerShotHitAShipButAllAdjacentSquaresHaveAlreadyBeenGuessed_CreatesARandomTarget()
+        {
+            // Arrange
+
+            Position lastComputerTarget = new Position(8, 6);
+
+            Position leftNeighbour = new Position(8, 5);
+            Position rightNeighbour = new Position(8, 7);
+            Position topNeighbour = new Position(7, 6);
+            Position bottomNeighbour = new Position(9, 6);
+
+            var underTest = new BattleshipGameAgainstComputer(
+                new Player(PlayerType.Human, "Attila"),
+                new List<Ship>
+                {
+                    new Ship(
+                       ShipType.Battleship,
+                       new List<Position>
+                       {
+                           new Position(2, 4),
+                           new Position(2, 5),
+                           new Position(2, 6),
+                       }
+                    )
+                },
+                new List<Ship>
+                {
+                    new Ship(
+                        ShipType.Cruiser,
+                        new List<Position>
+                        {
+                            new Position(5, 6),
+                            new Position(6, 6),
+                        }
+                    )
+                }
+            );
+
+            underTest.PlayerOneHits = 0;
+            underTest.PlayerTwoHits = 2;
+            underTest.NumberOfTurns = 11;
+
+            underTest.PlayerNameToMove = underTest.PlayerTwo.PlayerName;
+
+            underTest.PlayerOneGuesses.Add(new Position(0, 0));
+            underTest.PlayerOneGuesses.Add(new Position(0, 1));
+            underTest.PlayerOneGuesses.Add(new Position(0, 2));
+            underTest.PlayerOneGuesses.Add(new Position(0, 3));
+            underTest.PlayerOneGuesses.Add(new Position(0, 4));
+            underTest.PlayerOneGuesses.Add(new Position(0, 5));
+            underTest.PlayerTwoGuesses.Add(leftNeighbour);
+            underTest.PlayerTwoGuesses.Add(rightNeighbour);
+            underTest.PlayerTwoGuesses.Add(bottomNeighbour);
+            underTest.PlayerTwoGuesses.Add(topNeighbour);
+            underTest.PlayerTwoGuesses.Add(lastComputerTarget);
+
+            underTest.SinkingAtPreviousHitOfPlayerTwo = true;
+
+            // Act
+
+            Position actual = underTest.CreateComputerShot();
+
+            // Assert
+
+            Console.WriteLine(Convert.ToString(actual.Row) +  ", " + Convert.ToString(actual.Column));
+            Console.WriteLine(Convert.ToString(lastComputerTarget.Row) + ", " + Convert.ToString(lastComputerTarget.Column));
+            Assert.AreNotEqual(lastComputerTarget, actual);
+            Assert.IsFalse(actual.Equals(topNeighbour));
+            Assert.IsFalse(actual.Equals(rightNeighbour));
+            Assert.IsFalse(actual.Equals(leftNeighbour));
+            Assert.IsFalse(actual.Equals(bottomNeighbour));
+            Assert.IsFalse(underTest.PlayerTwoGuesses.Contains(actual));
+
+        }
+
     }
 }

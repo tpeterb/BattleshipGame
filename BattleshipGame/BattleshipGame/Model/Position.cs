@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace BattleshipGame.Model
@@ -44,19 +45,28 @@ namespace BattleshipGame.Model
             return !(a == b);
         }
 
-        public bool Equals(Position other)
-        {
-            return Row == other.Row && Column == other.Column;
-        }
-
         public override bool Equals(object obj)
         {
-            return (obj is Position) && Equals((Position) obj);
+            return this.Equals(obj as Position);
+        }
+
+        public bool Equals(Position other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return Row == other.Row && Column == other.Column;
         }
 
         public override int GetHashCode()
         {
             return (Row, Column).GetHashCode();
         }
+
     }
 }

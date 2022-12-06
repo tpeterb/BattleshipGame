@@ -96,3 +96,5 @@ O:\Tóth Péter Balázs\BattleshipGame\BattleshipGame\BattleshipGame.Tests\obj\D
 O:\Tóth Péter Balázs\BattleshipGame\BattleshipGame\BattleshipGame.Tests\obj\Debug\netcoreapp3.1\BattleshipGame.Tests.dll
 O:\Tóth Péter Balázs\BattleshipGame\BattleshipGame\BattleshipGame.Tests\obj\Debug\netcoreapp3.1\BattleshipGame.Tests.pdb
 O:\Tóth Péter Balázs\BattleshipGame\BattleshipGame\BattleshipGame.Tests\obj\Debug\netcoreapp3.1\BattleshipGame.Tests.genruntimeconfig.cache
+O:\Tóth Péter Balázs\BattleshipGame\BattleshipGame\BattleshipGame.Tests\bin\Debug\netcoreapp3.1\Castle.Core.dll
+O:\Tóth Péter Balázs\BattleshipGame\BattleshipGame\BattleshipGame.Tests\bin\Debug\netcoreapp3.1\Moq.dll

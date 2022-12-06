@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BattleshipGame.Model
 {
@@ -28,15 +29,12 @@ namespace BattleshipGame.Model
             {
                 return false;
             }
-            char[] specialCharacters = { '!', '?', '_', '-', '.', ':', '#', '(', ')', '{', '}', '[', ']' };
-            foreach (var character in specialCharacters)
+            var pattern = @"^[a-zA-Z0-9]+$";
+            if (Regex.IsMatch(playerName, pattern))
             {
-                if (playerName.Contains(character))
-                {
-                    return false;
-                }
+                return true;
             }
-            return true;
+            return false;
         }
 
         public override bool Equals(object obj)
