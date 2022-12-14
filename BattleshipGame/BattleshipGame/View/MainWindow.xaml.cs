@@ -24,5 +24,22 @@ namespace BattleshipGame
         {
             InitializeComponent();
         }
+
+        private void onClickQuit(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void onClickScoreBoard(object sender, RoutedEventArgs e)
+        {
+            MainMenuGrid.Visibility = Visibility.Hidden;
+            ScoreBoardGrid.Visibility = Visibility.Visible;
+        }
+
+        private void onClickBackScore(object sender, RoutedEventArgs e)
+        {
+            ScoreBoardGrid.Visibility = Visibility.Hidden;
+            MainMenuGrid.Visibility = Visibility.Visible;
+        }
     }
 }

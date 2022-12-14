@@ -1,0 +1,108 @@
+﻿<Window x:Class="BattleshipGame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BattleshipGame"
+        mc:Ignorable="d"
+        Title="Battleship Game" Height="auto" Width="auto">
+
+    <!-- Template Stylings -->
+    <Window.Resources>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FF000D10"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#303131"/>
+
+
+        <!-- MainMenuButton Stylings -->
+        <Style x:Key="MainMenuButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="7" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main Window -->
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
+
+        <!-- Main Menu -->
+        <Grid x:Name="MainMenuGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="600"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Content="Main Menu" Grid.Row="0"  Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
+            <Button Style="{DynamicResource MainMenuButtonStyle}" Content="New Game" Grid.Row="1" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand"/>
+            <Button Style="{DynamicResource MainMenuButtonStyle}" Content="Load Game" Grid.Row="2" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand"/>
+            <Button Style="{DynamicResource MainMenuButtonStyle}" Content="Scoreboard" Grid.Row="3" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Click="onClickScoreBoard"/>
+            <Button Style="{DynamicResource MainMenuButtonStyle}" Content="Quit" Grid.Row="4" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Click="onClickQuit"/>
+        </Grid>
+
+        <!-- ScoreBoard -->
+        <Grid x:Name="ScoreBoardGrid" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="300"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+                <ColumnDefinition Width="700"></ColumnDefinition>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Content="Scoreboard" Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
+            <ListView FontFamily="Ink Free" FontWeight="Bold" FontSize="14" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Foreground="White" Background="#FF000D10">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="100">
+                            <GridViewColumnHeader>Match Number</GridViewColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100">
+                            <GridViewColumnHeader>Player1 Name</GridViewColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100">
+                            <GridViewColumnHeader>Player2 Name</GridViewColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100">
+                            <GridViewColumnHeader>Player1 Hits</GridViewColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100">
+                            <GridViewColumnHeader>Player2 Hits</GridViewColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100">
+                            <GridViewColumnHeader>Rounds</GridViewColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100">
+                            <GridViewColumnHeader>Winner</GridViewColumnHeader>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Button Style="{DynamicResource MainMenuButtonStyle}" Content="Back" Grid.Row="4" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Click="onClickBackScore"/>
+        </Grid>
+    </Grid>
+</Window>
