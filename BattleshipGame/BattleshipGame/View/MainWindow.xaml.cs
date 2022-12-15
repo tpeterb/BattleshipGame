@@ -36,9 +36,21 @@ namespace BattleshipGame
             ScoreBoardGrid.Visibility = Visibility.Visible;
         }
 
+        private void onClickLoadGame(object sender, RoutedEventArgs e)
+        {
+            MainMenuGrid.Visibility = Visibility.Hidden;
+            LoadMenuGrid.Visibility = Visibility.Visible;
+        }
+
         private void onClickBackScore(object sender, RoutedEventArgs e)
         {
             ScoreBoardGrid.Visibility = Visibility.Hidden;
+            MainMenuGrid.Visibility = Visibility.Visible;
+        }
+
+        private void onClickBackLoad(object sender, RoutedEventArgs e)
+        {
+            LoadMenuGrid.Visibility = Visibility.Hidden;
             MainMenuGrid.Visibility = Visibility.Visible;
         }
     }
