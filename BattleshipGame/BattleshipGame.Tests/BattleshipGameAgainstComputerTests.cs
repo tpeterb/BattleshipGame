@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BattleshipGame.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BattleshipGame.Tests
 {
     [TestClass]
     public class BattleshipGameAgainstComputerTests
     {
-
         [TestMethod]
         public void CreateComputerShot_ThePreviousComputerShotDidNotHitAnything_CreatesARandomTarget()
         {
@@ -27,8 +26,7 @@ namespace BattleshipGame.Tests
                            new Position(2, 5),
                            new Position(2, 6),
                            new Position(2, 7),
-                       }
-                    )
+                       })
                 },
                 new List<Ship>
                 {
@@ -38,10 +36,8 @@ namespace BattleshipGame.Tests
                         {
                             new Position(5, 6),
                             new Position(6, 6),
-                        }
-                    )
-                }
-            );
+                        })
+                });
 
             underTest.PlayerNameToMove = underTest.PlayerTwo.PlayerName;
 
@@ -63,7 +59,6 @@ namespace BattleshipGame.Tests
 
             Assert.IsTrue(Model.BattleshipGame.IsPositionValid(actual));
             Assert.IsFalse(underTest.PlayerTwoGuesses.Contains(actual));
-
         }
 
         [TestMethod]
@@ -84,8 +79,7 @@ namespace BattleshipGame.Tests
                            new Position(2, 4),
                            new Position(2, 5),
                            new Position(2, 6),
-                       }
-                    )
+                       })
                 },
                 new List<Ship>
                 {
@@ -95,10 +89,8 @@ namespace BattleshipGame.Tests
                         {
                             new Position(5, 6),
                             new Position(6, 6),
-                        }
-                    )
-                }
-            );
+                        })
+                });
 
             underTest.PlayerNameToMove = underTest.PlayerTwo.PlayerName;
 
@@ -124,7 +116,6 @@ namespace BattleshipGame.Tests
                 || actual.Equals(new Position(lastComputerTarget.Row - 1, lastComputerTarget.Column))
                 || actual.Equals(new Position(lastComputerTarget.Row, lastComputerTarget.Column - 1))
                 || actual.Equals(new Position(lastComputerTarget.Row, lastComputerTarget.Column + 1)));
-
         }
 
         [TestMethod]
@@ -150,8 +141,7 @@ namespace BattleshipGame.Tests
                            new Position(2, 4),
                            new Position(2, 5),
                            new Position(2, 6),
-                       }
-                    )
+                       })
                 },
                 new List<Ship>
                 {
@@ -161,10 +151,8 @@ namespace BattleshipGame.Tests
                         {
                             new Position(5, 6),
                             new Position(6, 6),
-                        }
-                    )
-                }
-            );
+                        })
+                });
 
             underTest.PlayerOneHits = 0;
             underTest.PlayerTwoHits = 2;
@@ -192,7 +180,7 @@ namespace BattleshipGame.Tests
 
             // Assert
 
-            Console.WriteLine(Convert.ToString(actual.Row) +  ", " + Convert.ToString(actual.Column));
+            Console.WriteLine(Convert.ToString(actual.Row) + ", " + Convert.ToString(actual.Column));
             Console.WriteLine(Convert.ToString(lastComputerTarget.Row) + ", " + Convert.ToString(lastComputerTarget.Column));
             Assert.AreNotEqual(lastComputerTarget, actual);
             Assert.IsFalse(actual.Equals(topNeighbour));
@@ -200,8 +188,73 @@ namespace BattleshipGame.Tests
             Assert.IsFalse(actual.Equals(leftNeighbour));
             Assert.IsFalse(actual.Equals(bottomNeighbour));
             Assert.IsFalse(underTest.PlayerTwoGuesses.Contains(actual));
-
         }
 
+        [TestMethod]
+        public void CreateStartingPositionForComputer_CalledAtTheBeginningOfTheGame_CreatesAValidStartingPosition()
+        {
+            // Arrange
+
+            var battleshipGame = new BattleshipGameWithTwoPlayers(
+                new Player(PlayerType.Human, "Pisti"),
+                new Player(PlayerType.Human, "Jancsi"),
+                new List<Ship>
+                {
+                    new Ship(
+                        ShipType.AircraftCarrier,
+                        new List<Position>
+                        {
+                            new Position(0, 0),
+                            new Position(0, 1),
+                            new Position(0, 2),
+                            new Position(0, 3),
+                            new Position(0, 4)
+                        }),
+                    new Ship(
+                        ShipType.Battleship,
+                        new List<Position>
+                        {
+                            new Position(2, 6),
+                            new Position(3, 6),
+                            new Position(4, 6),
+                            new Position(5, 6)
+                        }),
+                    new Ship(
+                        ShipType.Submarine,
+                        new List<Position>
+                        {
+                            new Position(8, 2),
+                            new Position(8, 3),
+                            new Position(8, 4)
+                        }),
+                    new Ship(
+                        ShipType.Cruiser,
+                        new List<Position>
+                        {
+                            new Position(0, 9),
+                            new Position(1, 9),
+                            new Position(2, 9)
+                        }),
+                    new Ship(
+                        ShipType.Destroyer,
+                        new List<Position>
+                        {
+                            new Position(4, 1),
+                            new Position(4, 2)
+                        })
+                },
+                new List<Ship>());
+
+            // Act
+
+            List<Ship> actual = BattleshipGameAgainstComputer.CreateStartingPositionForComputer();
+            battleshipGame.PlayerTwoCurrentShips = actual;
+            battleshipGame.PlayerTwoOriginalShips = actual;
+
+            // Assert
+
+            Assert.AreEqual(5, actual.Count);
+            Assert.IsNotNull(actual);
+        }
     }
 }

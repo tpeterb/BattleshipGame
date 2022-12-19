@@ -17,7 +17,8 @@ namespace BattleshipGame.Model
             if (IsPlayerNameValid(playerName))
             {
                 PlayerName = playerName;
-            } else
+            }
+            else
             {
                 throw new ArgumentException("The player's name is invalid, it cannot be empty, consist of whitespaces, or contain special characters!");
             }

@@ -1,8 +1,8 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BattleshipGame.Model;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using BattleshipGame.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace BattleshipGame.Tests
@@ -10,9 +10,8 @@ namespace BattleshipGame.Tests
     [TestClass]
     public class BattleshipGameUnitTests
     {
-
         /* A valid starting position:
-         
+
         var battleshipGame = new BattleshipGameWithTwoPlayers(
                 new Player(PlayerType.Human, "Pisti"),
                 new Player(PlayerType.Human, "Jancsi"),
@@ -111,7 +110,7 @@ namespace BattleshipGame.Tests
                         }
                     )
                 }
-            ); 
+            );
 
          */
 
@@ -123,17 +122,20 @@ namespace BattleshipGame.Tests
             var battleshipGameMock = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.AircraftCarrier,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(0, 0),
                             new Position(0, 1),
                             new Position(0, 2)
                         }),
                     new Ship(
                         ShipType.Battleship,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(2, 6),
                             new Position(3, 6),
                             new Position(4, 6),
@@ -145,11 +147,9 @@ namespace BattleshipGame.Tests
                         {
                             new Position(8, 2),
                             new Position(8, 3)
-                        }
-                    )
+                        })
                 },
-                new List<Ship> { }
-            )
+                new List<Ship> { })
             {
                 CallBase = true
             };
@@ -174,7 +174,7 @@ namespace BattleshipGame.Tests
             battleshipGameMock.Object.PlayerTwoGuesses.Add(new Position(9, 4));
             battleshipGameMock.Object.PlayerTwoGuesses.Add(new Position(9, 5));
             battleshipGameMock.Object.PlayerTwoGuesses.Add(new Position(9, 6));
-            
+
             battleshipGameMock.Object.SinkingAtPreviousHitOfPlayerOne = true;
 
             bool expected = true;
@@ -187,7 +187,6 @@ namespace BattleshipGame.Tests
 
             Assert.AreEqual(expected, actual);
             Assert.IsTrue(actual);
-
         }
 
         [TestMethod]
@@ -207,18 +206,15 @@ namespace BattleshipGame.Tests
                         {
                             new Position(8, 8),
                             new Position(9, 8),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8)
-                        }
-                    )
-                }
-            )
-            { 
+                        })
+                })
+            {
                 CallBase = true
             };
 
@@ -260,14 +256,14 @@ namespace BattleshipGame.Tests
             var battleshipGame = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -278,11 +274,9 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -322,15 +316,18 @@ namespace BattleshipGame.Tests
             var battleshipGame = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.AircraftCarrier,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(0, 0),
                         }),
                     new Ship(
                         ShipType.Battleship,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(2, 6),
                         }),
                     new Ship(
@@ -338,12 +335,10 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(8, 2),
-                        }
-                    )
+                        })
                 },
-                new List<Ship> { }
-            )
-            { 
+                new List<Ship> { })
+            {
                 CallBase = true
             };
 
@@ -385,30 +380,28 @@ namespace BattleshipGame.Tests
             var battleshipGame = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(8, 2),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Cruiser,
                         new List<Position>
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -417,8 +410,7 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(2, 6),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Battleship,
                         new List<Position>
@@ -426,26 +418,22 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
+                        })
+                })
             {
                 CallBase = true
             };
@@ -489,10 +477,8 @@ namespace BattleshipGame.Tests
                         {
                             new Position(2, 6),
                             new Position(3, 6),
-                        }
-                    )
-                }
-            )
+                        })
+                })
             {
                 CallBase = true
             };
@@ -534,15 +520,18 @@ namespace BattleshipGame.Tests
             var battleshipGame = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.AircraftCarrier,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(0, 0),
                         }),
                     new Ship(
                         ShipType.Battleship,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(2, 6),
                             new Position(3, 6),
                             new Position(4, 6),
@@ -553,16 +542,14 @@ namespace BattleshipGame.Tests
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -571,27 +558,23 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(7, 1),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
-            { 
+                        })
+                })
+            {
                 CallBase = true
             };
 
@@ -649,7 +632,6 @@ namespace BattleshipGame.Tests
 
             Assert.AreEqual(expected, actual);
             Assert.IsTrue(actual);
-
         }
 
         [DataTestMethod]
@@ -675,7 +657,6 @@ namespace BattleshipGame.Tests
 
             Assert.AreEqual(expected, actual);
             Assert.IsFalse(actual);
-
         }
 
         [TestMethod]
@@ -689,15 +670,18 @@ namespace BattleshipGame.Tests
             var battleshipGame = new Mock<BattleshipGame.Model.BattleshipGame>(
                 playerToShoot,
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.AircraftCarrier,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(0, 0),
                         }),
                     new Ship(
                         ShipType.Battleship,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(2, 6),
                             new Position(3, 6),
                             new Position(4, 6),
@@ -708,16 +692,14 @@ namespace BattleshipGame.Tests
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -726,27 +708,23 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(7, 1),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
-            { 
+                        })
+                })
+            {
                 CallBase = true
             };
 
@@ -765,10 +743,10 @@ namespace BattleshipGame.Tests
             battleshipGame.Object.SinkingAtPreviousHitOfPlayerOne = false;
             battleshipGame.Object.SinkingAtPreviousHitOfPlayerOne = true;
 
-
             // Act, Assert
 
-            Assert.ThrowsException<ArgumentException>(() => battleshipGame.Object.MakeShot(playerToShoot, positionToShootAt),
+            Assert.ThrowsException<ArgumentException>(
+                () => battleshipGame.Object.MakeShot(playerToShoot, positionToShootAt),
                 "Shooting at a position that's not present on the board!");
         }
 
@@ -784,30 +762,28 @@ namespace BattleshipGame.Tests
             var underTest = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToTryToShootWith,
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(8, 2),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Cruiser,
                         new List<Position>
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -816,8 +792,7 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(2, 6),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Battleship,
                         new List<Position>
@@ -825,26 +800,22 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
+                        })
+                })
             {
                 CallBase = true
             };
@@ -864,30 +835,28 @@ namespace BattleshipGame.Tests
             var expected = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToTryToShootWith,
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(8, 2),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Cruiser,
                         new List<Position>
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -896,8 +865,7 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(2, 6),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Battleship,
                         new List<Position>
@@ -905,27 +873,23 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
-            { 
+                        })
+                })
+            {
                 CallBase = true
             };
 
@@ -962,14 +926,14 @@ namespace BattleshipGame.Tests
             var underTest = new Mock<BattleshipGame.Model.BattleshipGame>(
                 playerToShootWith,
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -980,11 +944,9 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -1007,14 +969,14 @@ namespace BattleshipGame.Tests
             var expected = new Mock<BattleshipGame.Model.BattleshipGame>(
                 playerToShootWith,
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1025,11 +987,9 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -1070,7 +1030,8 @@ namespace BattleshipGame.Tests
             var underTest = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToShootWith,
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.AircraftCarrier,
                         new List<Position>
@@ -1078,8 +1039,7 @@ namespace BattleshipGame.Tests
                             new Position(4, 1),
                             new Position(4, 2),
                             new Position(4, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
@@ -1097,11 +1057,9 @@ namespace BattleshipGame.Tests
                             new Position(5, 4),
                             new Position(6, 4),
                             new Position(7, 4)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -1123,7 +1081,8 @@ namespace BattleshipGame.Tests
             var expected = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToShootWith,
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.AircraftCarrier,
                         new List<Position>
@@ -1131,8 +1090,7 @@ namespace BattleshipGame.Tests
                             new Position(4, 1),
                             new Position(4, 2),
                             new Position(4, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
@@ -1150,11 +1108,9 @@ namespace BattleshipGame.Tests
                             new Position(5, 4),
                             new Position(6, 4),
                             new Position(7, 4)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -1179,7 +1135,6 @@ namespace BattleshipGame.Tests
             // Assert
 
             Assert.AreEqual(expected.Object, underTest.Object);
-
         }
 
         [TestMethod]
@@ -1194,14 +1149,14 @@ namespace BattleshipGame.Tests
             var underTest = new Mock<BattleshipGame.Model.BattleshipGame>(
                 playerToShootWith,
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1212,11 +1167,9 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -1236,14 +1189,14 @@ namespace BattleshipGame.Tests
             var expected = new Mock<BattleshipGame.Model.BattleshipGame>(
                 playerToShootWith,
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1254,11 +1207,9 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -1285,7 +1236,6 @@ namespace BattleshipGame.Tests
             // Assert
 
             Assert.AreEqual(expected.Object, underTest.Object);
-
         }
 
         [TestMethod]
@@ -1300,14 +1250,14 @@ namespace BattleshipGame.Tests
             var underTest = new Mock<BattleshipGame.Model.BattleshipGame>(
                 playerToShootWith,
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1318,11 +1268,9 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -1350,14 +1298,14 @@ namespace BattleshipGame.Tests
             var expected = new Mock<BattleshipGame.Model.BattleshipGame>(
                 playerToShootWith,
                 new Player(PlayerType.Human, "Jancsi"),
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1368,11 +1316,9 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3)
-                        }
-                    ),
-                }
-            )
-            { 
+                        }),
+                })
+            {
                 CallBase = true
             };
 
@@ -1420,30 +1366,28 @@ namespace BattleshipGame.Tests
             var underTest = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToShootWith,
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(8, 2)
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Cruiser,
                         new List<Position>
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1452,8 +1396,7 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(2, 6)
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Battleship,
                         new List<Position>
@@ -1461,27 +1404,23 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
-            { 
+                        })
+                })
+            {
                 CallBase = true
             };
 
@@ -1502,30 +1441,28 @@ namespace BattleshipGame.Tests
             var expected = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToShootWith,
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(8, 2)
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Cruiser,
                         new List<Position>
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1534,8 +1471,7 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(2, 6)
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Battleship,
                         new List<Position>
@@ -1543,27 +1479,23 @@ namespace BattleshipGame.Tests
                             new Position(7, 1),
                             new Position(7, 2),
                             new Position(7, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
-            { 
+                        })
+                })
+            {
                 CallBase = true
             };
 
@@ -1595,7 +1527,6 @@ namespace BattleshipGame.Tests
             // Assert
 
             Assert.AreEqual(expected.Object, underTest.Object);
-
         }
 
         [TestMethod]
@@ -1610,15 +1541,18 @@ namespace BattleshipGame.Tests
             var underTest = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToShootWith,
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.AircraftCarrier,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(0, 0),
                         }),
                     new Ship(
                         ShipType.Battleship,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(2, 6),
                             new Position(3, 6),
                             new Position(4, 6),
@@ -1629,16 +1563,14 @@ namespace BattleshipGame.Tests
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1647,27 +1579,23 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(7, 1),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
-            { 
+                        })
+                })
+            {
                 CallBase = true
             };
 
@@ -1686,15 +1614,18 @@ namespace BattleshipGame.Tests
             var expected = new Mock<BattleshipGame.Model.BattleshipGame>(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToShootWith,
-                new List<Ship> {
+                new List<Ship>
+                {
                     new Ship(
                         ShipType.AircraftCarrier,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(0, 0),
                         }),
                     new Ship(
                         ShipType.Battleship,
-                        new List<Position> {
+                        new List<Position>
+                        {
                             new Position(2, 6),
                             new Position(3, 6),
                             new Position(4, 6),
@@ -1705,16 +1636,14 @@ namespace BattleshipGame.Tests
                         {
                             new Position(0, 9),
                             new Position(1, 9),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 1),
                             new Position(4, 2)
-                        }
-                    )
+                        })
                 },
                 new List<Ship>
                 {
@@ -1723,27 +1652,23 @@ namespace BattleshipGame.Tests
                         new List<Position>
                         {
                             new Position(7, 1),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Submarine,
                         new List<Position>
                         {
                             new Position(1, 2),
                             new Position(1, 3),
-                        }
-                    ),
+                        }),
                     new Ship(
                         ShipType.Destroyer,
                         new List<Position>
                         {
                             new Position(4, 8),
                             new Position(4, 9)
-                        }
-                    )
-                }
-            )
-            { 
+                        })
+                })
+            {
                 CallBase = true
             };
 
@@ -1770,7 +1695,6 @@ namespace BattleshipGame.Tests
             // Assert
 
             Assert.AreEqual(expected.Object, underTest.Object);
-
         }
 
         /******************************/
@@ -2528,7 +2452,7 @@ namespace BattleshipGame.Tests
                     ),
                     new Ship(
                         ShipType.Destroyer,
-                        new List<Position> 
+                        new List<Position>
                         {
                             new Position(8, 1),
                             new Position(9, 1)
@@ -2703,7 +2627,7 @@ namespace BattleshipGame.Tests
             Assert.AreEqual(expected, underTest);
 
         }
-        
+
         [TestMethod]
         public void MakeShot_CanMakeShotWithPlayerOneAndTheShotDoesNotHitAShip_MakesTheShot()
         {
@@ -2903,7 +2827,7 @@ namespace BattleshipGame.Tests
             underTest.PlayerOneHits = 3;
             underTest.PlayerTwoHits = 3;
             underTest.NumberOfTurns = 7;
-            
+
             var expected = new BattleshipGameWithTwoPlayers(
                 new Player(PlayerType.Human, "Pisti"),
                 playerToShootWith,
@@ -3168,6 +3092,5 @@ namespace BattleshipGame.Tests
             Assert.AreEqual(expected, underTest);
 
         }*/
-
     }
 }

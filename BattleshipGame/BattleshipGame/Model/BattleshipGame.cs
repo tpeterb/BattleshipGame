@@ -46,7 +46,7 @@ namespace BattleshipGame.Model
             NumberOfTurns = 0;
             PlayerOneGuesses = new List<Position>();
             PlayerTwoGuesses = new List<Position>();
-            WinnerPlayerName = "";
+            WinnerPlayerName = string.Empty;
         }
 
         protected BattleshipGame(Player playerOne, Player playerTwo, List<Ship> playerOneShips, List<Ship> playerTwoShips)
@@ -83,11 +83,13 @@ namespace BattleshipGame.Model
                     PlayerOneHits++;
                     SinkingAtPreviousHitOfPlayerOne = true;
                     DestroyShipPart(PlayerTwoCurrentShips, positionToShootAt);
-                } else
+                }
+                else
                 {
                     SinkingAtPreviousHitOfPlayerOne = false;
                 }
-            } else if (playerToShoot.PlayerName == PlayerTwo.PlayerName)
+            }
+            else if (playerToShoot.PlayerName == PlayerTwo.PlayerName)
             {
                 PlayerTwoGuesses.Add(positionToShootAt);
                 if (ShotHitsAShip(PlayerOneCurrentShips, positionToShootAt))
@@ -95,7 +97,8 @@ namespace BattleshipGame.Model
                     PlayerTwoHits++;
                     SinkingAtPreviousHitOfPlayerTwo = true;
                     DestroyShipPart(PlayerOneCurrentShips, positionToShootAt);
-                } else
+                }
+                else
                 {
                     SinkingAtPreviousHitOfPlayerTwo = false;
                 }
@@ -116,7 +119,8 @@ namespace BattleshipGame.Model
                     return false;
                 }
                 return true;
-            } else if (playerToShoot.PlayerName == PlayerTwo.PlayerName)
+            }
+            else if (playerToShoot.PlayerName == PlayerTwo.PlayerName)
             {
                 if (PlayerTwoGuesses.Contains(positionToShootAt))
                 {
@@ -143,7 +147,7 @@ namespace BattleshipGame.Model
         }
 
         public bool IsGameOver()
-        {            
+        {
             if (IsPlayerOneWinning() || IsPlayerTwoWinning())
             {
                 return true;
@@ -153,8 +157,8 @@ namespace BattleshipGame.Model
 
         public bool IsPlayerOneWinning()
         {
-            List<bool> PlayerTwoShipDestroyedStates = PlayerTwoCurrentShips.Select(ship => ship.Destroyed).ToList();
-            if (!PlayerTwoShipDestroyedStates.Contains(false))
+            List<bool> playerTwoShipDestroyedStates = PlayerTwoCurrentShips.Select(ship => ship.Destroyed).ToList();
+            if (!playerTwoShipDestroyedStates.Contains(false))
             {
                 return true;
             }
@@ -163,8 +167,8 @@ namespace BattleshipGame.Model
 
         public bool IsPlayerTwoWinning()
         {
-            List<bool> PlayerOneShipDestroyedStates = PlayerOneCurrentShips.Select(ship => ship.Destroyed).ToList();
-            if (!PlayerOneShipDestroyedStates.Contains(false))
+            List<bool> playerOneShipDestroyedStates = PlayerOneCurrentShips.Select(ship => ship.Destroyed).ToList();
+            if (!playerOneShipDestroyedStates.Contains(false))
             {
                 return true;
             }
@@ -195,7 +199,8 @@ namespace BattleshipGame.Model
             if (PlayerNameToMove == PlayerOne.PlayerName)
             {
                 PlayerNameToMove = PlayerTwo.PlayerName;
-            } else
+            }
+            else
             {
                 PlayerNameToMove = PlayerOne.PlayerName;
             }
@@ -259,6 +264,5 @@ namespace BattleshipGame.Model
                 SinkingAtPreviousHitOfPlayerTwo,
                 WinnerPlayerName).GetHashCode();
         }
-
     }
 }

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BattleshipGame.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BattleshipGame.Tests
 {
     [TestClass]
     public class PositionTests
     {
-
         [DataTestMethod]
         [DataRow(2, 5)]
         [DataRow(8, 4)]
@@ -45,8 +44,6 @@ namespace BattleshipGame.Tests
             Assert.AreEqual(expectedPositionBelow, actualPositionBelow);
             Assert.AreEqual(expectedPositionToTheLeft, actualPositionToTheLeft);
             Assert.AreEqual(expectedPositionToTheRight, actualPositionToTheRight);
-
         }
-
     }
 }

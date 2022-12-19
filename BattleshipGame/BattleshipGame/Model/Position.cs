@@ -35,12 +35,12 @@ namespace BattleshipGame.Model
             };
         }
 
-        public static bool operator==(Position a, Position b)
+        public static bool operator ==(Position a, Position b)
         {
             return a.Row == b.Row && a.Column == b.Column;
         }
 
-        public static bool operator!=(Position a, Position b)
+        public static bool operator !=(Position a, Position b)
         {
             return !(a == b);
         }
@@ -67,6 +67,5 @@ namespace BattleshipGame.Model
         {
             return (Row, Column).GetHashCode();
         }
-
     }
 }

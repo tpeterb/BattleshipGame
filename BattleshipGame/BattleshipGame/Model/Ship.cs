@@ -7,7 +7,6 @@ namespace BattleshipGame.Model
 {
     public class Ship
     {
-
         public const int AircraftCarrierSize = 5;
 
         public const int BattleshipSize = 4;
@@ -36,7 +35,8 @@ namespace BattleshipGame.Model
                 if (BattleshipGame.IsPositionValid(position))
                 {
                     ShipPositions.Add(position);
-                } else
+                }
+                else
                 {
                     throw new ArgumentException("The ship's position is invalid, does not fit on the board!");
                 }
