@@ -147,7 +147,7 @@
         </Grid>
 
         <!-- New Game -->
-        <Grid x:Name="NewGameMenuGrid" >
+        <Grid x:Name="NewGameMenuGrid" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="116"></RowDefinition>
@@ -175,19 +175,63 @@
         </Grid>
 
         <!-- Game -->
-        <Grid x:Name="GameGrid">
+        <Grid x:Name="GameGrid" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="175"></RowDefinition>
-                <RowDefinition Height="175"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+                <RowDefinition Height="250"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"></ColumnDefinition>
-                <ColumnDefinition Width="200"></ColumnDefinition>
+                <ColumnDefinition Width="300"></ColumnDefinition>
                 <ColumnDefinition Width="400"></ColumnDefinition>
                 <ColumnDefinition Width="50"></ColumnDefinition>
             </Grid.ColumnDefinitions>
+            <Label Content="Your Table" Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10"  Background="White"/>
+
+            <Grid x:Name="YourGrid">
+                
+            </Grid>
+            
+            <StackPanel VerticalAlignment="Center" Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+                <Label x:Name="NumberOfRoundsLabel" Content="NumberOfRounds: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+                <Label x:Name="NumberOfYourHitsLabel" Content="NumberOfYourHits: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+                <Label x:Name="NumberOfOpponentHitsLabel" Content="NumberOfOpponentHits: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+                <Label x:Name="ShipsLabel" Content="Ships: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+            </StackPanel>
+
+            <Button Style="{DynamicResource MenuButtonStyle}" Content="Quit" Grid.Row="3" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="125" HorizontalAlignment="Left" Click="onClickQuit" Margin="15,0,0,0"/>
+            <Button Style="{DynamicResource MenuButtonStyle}" Content="Save" Grid.Row="3" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="125" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+
+
+            <Label Content="Opponent Table" Grid.Row="0" Grid.Column="2" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10"  Background="White"/>
+            
+            <Label Content="Click on a cell to make a hit!" Grid.Row="1" Grid.Column="2" FontWeight="Bold" FontFamily="Ink Free" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FF000D10"  Background="White"/>
+            
+            <Grid x:Name="OpponentGrid" Grid.RowSpan="3" Grid.Column="2" Height="300" VerticalAlignment="Bottom">
+
+            </Grid>
+
+            <Button Style="{DynamicResource MenuButtonStyle}" Content="Undo" Grid.Row="3" Grid.Column="2" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="125" HorizontalAlignment="Left" Margin="15,0,0,0"/>
+            <Button Style="{DynamicResource MenuButtonStyle}" Content="Ready" Grid.Row="3" Grid.Column="2" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="125" HorizontalAlignment="Right" Margin="0,0,15,0"/>
         </Grid>
-    </Grid>
+        
+            <!-- PlayerSwap -->
+            <Grid x:Name="PlayerSwapGrid" Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="175"></RowDefinition>
+                    <RowDefinition Height="175"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="600"></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+            <TextBlock Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" TextWrapping="WrapWithOverflow" Grid.Row="1"  Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" TextAlignment="Center"></TextBlock>
+                <Button Style="{DynamicResource MenuButtonStyle}" Content="Ready" Grid.Row="2" Grid.Column="1" FontFamily="Ink Free" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" Cursor="Hand" HorizontalAlignment="Center" Click="onClickReadyPlayerSwap" Width="198" Height="75"/>
+            </Grid>
+        </Grid>
 </Window>
