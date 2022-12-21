@@ -42,7 +42,7 @@
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
 
         <!-- Main Menu -->
-        <Grid x:Name="MainMenuGrid" Visibility="Hidden">
+        <Grid x:Name="MainMenuGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="100"></RowDefinition>
@@ -218,7 +218,7 @@
         </Grid>
         
             <!-- PlayerSwap -->
-            <Grid x:Name="PlayerSwapGrid" Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}">
+            <Grid x:Name="PlayerSwapGrid" Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Visibility="Hidden">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"></RowDefinition>
                     <RowDefinition Height="175"></RowDefinition>

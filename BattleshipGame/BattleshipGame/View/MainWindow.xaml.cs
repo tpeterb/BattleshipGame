@@ -121,7 +121,7 @@ namespace BattleshipGame.View
 
 
             NewGameMenuGrid.Visibility = Visibility.Hidden;
-            GameGrid.Visibility = Visibility.Visible;
+            PlayerSwapGrid.Visibility = Visibility.Visible;
         }
 
         private void onClickReadyPlayerSwap(object sender, RoutedEventArgs e)
