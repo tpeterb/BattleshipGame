@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="BattleshipGame.View.Game"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BattleshipGame.View"
+        mc:Ignorable="d">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel Margin="0 0 0 40">
+            <TextBlock Text="PlayerName"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <local:GameGridTable x:Name="yourTable" VerticalAlignment="Center" Margin="20 0 0 0"/>
+            <local:GameGridTable VerticalAlignment="Center" Margin="60 0 20 0"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Vertical" Margin="0 0 20 0">
+                <Label x:Name="NumberOfRoundsLabel" Content="NumberOfRounds: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+                <Label x:Name="NumberOfYourHitsLabel" Content="NumberOfYourHits: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+                <Label x:Name="NumberOfOpponentHitsLabel" Content="NumberOfOpponentHits: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+                <Label x:Name="ShipsLabel" Content="Ships: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+            </StackPanel>
+        </StackPanel>
+
+
+    </StackPanel>
+</UserControl>

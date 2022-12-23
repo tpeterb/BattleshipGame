@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BattleshipGame.View;
+using BattleshipGame.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;

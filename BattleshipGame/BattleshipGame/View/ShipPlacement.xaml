@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="BattleshipGame.View.ShipPlacement"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BattleshipGame.View"
+        mc:Ignorable="d">
+
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <local:GameGridTable x:Name="field" VerticalAlignment="Center"/>
+        <StackPanel>
+            <Border>
+                <StackPanel Orientation="Horizontal" Width="200">
+                    <TextBlock Text="AircraftCarrier" MouseLeftButtonDown="ShipText_MouseLeftButtonDown"/>
+                </StackPanel>
+            </Border>
+            <Border>
+                <StackPanel Orientation="Horizontal" Width="200">
+                    <TextBlock Text="Battleship" MouseLeftButtonDown="ShipText_MouseLeftButtonDown"/>
+                </StackPanel>
+            </Border>
+            <Border>
+                <StackPanel Orientation="Horizontal" Width="200">
+                    <TextBlock Text="Cruiser" MouseLeftButtonDown="ShipText_MouseLeftButtonDown"/>
+                </StackPanel>
+            </Border>
+            <Border>
+                <StackPanel Orientation="Horizontal" Width="200">
+                    <TextBlock Text="Submarine" MouseLeftButtonDown="ShipText_MouseLeftButtonDown"/>
+                </StackPanel>
+            </Border>
+            <Border>
+                <StackPanel Orientation="Horizontal" Width="200">
+                    <TextBlock Text="Destroyer" MouseLeftButtonDown="ShipText_MouseLeftButtonDown"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <StackPanel>
+            <Button x:Name="Rotate" Style="{DynamicResource MenuButtonStyle}" Content="Rotate" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="150" Click="ShipOrientationRotate"/>
+            <Button x:Name="Confirm" Style="{DynamicResource MenuButtonStyle}" Content="Confirm" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="150" Click="ShipOrientationRotate" Visibility="Hidden"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

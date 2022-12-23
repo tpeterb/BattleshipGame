@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="BattleshipGame.View.ScoreBoard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BattleshipGame.View"
+        mc:Ignorable="d">
+    
+    <Grid x:Name="ScoreBoardGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+            <ColumnDefinition Width="700"></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Content="Scoreboard" Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
+        <ListView FontFamily="Ink Free" FontWeight="Bold" FontSize="14" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Foreground="White" Background="#FF000D10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="100">
+                        <GridViewColumnHeader>Match Number</GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100">
+                        <GridViewColumnHeader>Player1 Name</GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100">
+                        <GridViewColumnHeader>Player2 Name</GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100">
+                        <GridViewColumnHeader>Player1 Hits</GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100">
+                        <GridViewColumnHeader>Player2 Hits</GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100">
+                        <GridViewColumnHeader>Rounds</GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100">
+                        <GridViewColumnHeader>Winner</GridViewColumnHeader>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Style="{DynamicResource MenuButtonStyle}" Content="Back" Name="Back" Grid.Row="4" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand"/>
+    </Grid>
+</UserControl>
