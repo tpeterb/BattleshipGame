@@ -166,9 +166,7 @@ namespace BattleshipGame.View
                     Player2ShipPlacement.Confirm.Click += onClickShipPlacementTwoPlayer;
                     Player2Board.Shot.Click += onClickShot;
 
-                    PlayerSwap playerSwap = new PlayerSwap(player1Name);
-                    playerSwap.ReadyButton.Click += PlayerSwapToShipPlacement;
-                    currentScreen.Content = playerSwap;
+                    playerSwapConfig(player1Name, PlayerSwapToShipPlacement);
                 }
             }
             catch (Exception ex)
@@ -212,7 +210,235 @@ namespace BattleshipGame.View
                     PlayerSwapToShipPlacement(sender, e);
                 }
             }
+        }
 
+        private void AgainstComputer()
+        {
+            GameGridTable p1EnemyField = Player1Board.enemyTable;
+            if (p1EnemyField.selectedTile != null)
+            {
+                string hit = GameFieldProcessOnePlayerMode(p1EnemyField);
+                int[] fieldRowAndColumn = getTileRowAndColumn(p1EnemyField);
+                BoardUpdate(Player1Name.PlayerName, boardLabel[fieldRowAndColumn[0]] + "-" + (fieldRowAndColumn[1] + 1), hit);
+
+                if (battleshipGameAgainstComputer.IsGameOver())
+                {
+                    MessageBox.Show("You won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MainMenu();
+                }
+                else
+                {
+                    ComputerShot(battleshipGameAgainstComputer.CreateComputerShot());
+                }
+                DefaultSelectedTile(p1EnemyField);
+            }
+        }
+
+        private string GameFieldProcessOnePlayerMode(GameGridTable field)
+        {
+            int index = field.grid.Children.IndexOf(field.selectedTile);
+            int[] tileRowAndColumn = getTileRowAndColumn(field);
+            int row = tileRowAndColumn[0];
+            int column = tileRowAndColumn[1];
+            Position pos = new Position(row, column);
+            battleshipGameAgainstComputer.MakeShot(Player1Name, pos);
+            if (battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerOne)
+            {
+                field[index].Fill = Brushes.DarkRed;
+                return "X";
+            }
+            else
+            {
+                field[index].Fill = Brushes.DarkBlue;
+                return "-";
+            }
+        }
+
+        private void ComputerShot(Position pos)
+        {
+            GameGridTable Player1ShipsField = Player1Board.yourTable;
+            var tile = Player1ShipsField.grid.Children.Cast<Rectangle>().Where(child => Grid.GetRow(child) == pos.Row && Grid.GetColumn(child) == pos.Column).First();
+            if (tile != null)
+            {
+                string hit = GameFieldComputerProcessOnePlayerMode(Player1ShipsField, tile);
+              
+                battleshipGameAgainstComputer.MakeShot(battleshipGameAgainstComputer.PlayerTwo, pos);
+
+                if (battleshipGameAgainstComputer.IsGameOver())
+                {
+                    MessageBox.Show("You lose!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Player1Board.Shot.Click -= onClickShot;
+                    MainMenu();
+                }
+
+                BoardUpdate("Computer", boardLabel[pos.Column] + "-" + (pos.Row + 1), hit);
+
+            }
+        }
+
+        private string GameFieldComputerProcessOnePlayerMode(GameGridTable field, Rectangle tile)
+        {
+            int index = field.grid.Children.IndexOf(tile);
+            if (field[index].Fill != Brushes.LightSkyBlue)
+            {
+                field[index].Fill = Brushes.DarkRed;
+                return "X";
+            }
+            else
+            {
+                battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerTwo = false;
+                field[index].Fill = Brushes.DarkBlue;
+                return "-";
+            }
+        }
+
+        #endregion
+
+        #region TwoPlayerGame
+
+        private void PlayerSwapToShipPlacement(object sender, RoutedEventArgs e)
+        {
+            if(Player1Ready != true){
+                currentScreen.Content = Player1ShipPlacement;
+            }
+            else if(Player2Ready != true){
+                playerSwapConfig(Player2Name.PlayerName, SwapContentP2);
+            }
+            else{
+                battleshipGameWithTwoPlayers = new BattleshipGameWithTwoPlayers(Player1Name, Player2Name, Player1Ships, Player2Ships);
+                playerSwapConfig(battleshipGameWithTwoPlayers.PlayerNameToMove, PlayerSwapToBoard);
+                if (Player1Name.PlayerName != battleshipGameWithTwoPlayers.PlayerNameToMove)
+                    Player1Ready = false;
+            }
+        }
+
+        private void AgainstTwoPlayer()
+        {
+
+            if (Player1Ready)
+            {
+                GameGridTable p2Field = Player2Board.yourTable;
+                GameGridTable p1EnemyField = Player1Board.enemyTable;
+
+                if (p1EnemyField.selectedTile != null)
+                {
+                    string hit = GameFieldProcessTwoPlayerMode(Player1Name, p2Field, p1EnemyField);
+                    int[] tileRowAndColumn = getTileRowAndColumn(p1EnemyField);
+                    int row = tileRowAndColumn[0];
+                    int column = tileRowAndColumn[1];
+                    BoardUpdate(Player1Name.PlayerName, boardLabel[column] + "-" + (row + 1), hit);
+                    DefaultSelectedTile(p1EnemyField);
+                }
+            }
+            else
+            {
+                GameGridTable p2EnemyField = Player2Board.enemyTable;
+                GameGridTable p1Field = Player1Board.yourTable;
+
+                if (p2EnemyField.selectedTile != null)
+                {
+                    string hit = GameFieldProcessTwoPlayerMode(Player2Name, p1Field, p2EnemyField);
+                    int[] tileRowAndColumn = getTileRowAndColumn(p2EnemyField);
+                    int row = tileRowAndColumn[0];
+                    int column = tileRowAndColumn[1];
+                    BoardUpdate(Player2Name.PlayerName, boardLabel[column] + "-" + (row + 1), hit);
+                    DefaultSelectedTile(p2EnemyField);
+                }
+            }
+
+            if (battleshipGameWithTwoPlayers.IsGameOver())
+            {
+                MessageBox.Show(battleshipGameWithTwoPlayers.WinnerPlayerName + " won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MainMenu();
+            }
+            else
+            {
+                playerSwapConfig(battleshipGameWithTwoPlayers.PlayerNameToMove, PlayerSwapToBoard);
+            }
+        }
+
+        private string GameFieldProcessTwoPlayerMode(Player player, GameGridTable playerField, GameGridTable enemyField)
+        {
+            int[] tileRowAndColumn = getTileRowAndColumn(enemyField);
+            int index = enemyField.grid.Children.IndexOf(enemyField.selectedTile);
+            int row = tileRowAndColumn[0];
+            int column = tileRowAndColumn[1];
+            Position pos = new Position(row, column);
+            battleshipGameWithTwoPlayers.MakeShot(player, pos);
+            if (battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerOne)
+            {
+                enemyField[index].Fill = Brushes.DarkRed;
+                playerField[index].Fill = Brushes.DarkRed;
+                return "X";
+            }
+            else
+            {
+                enemyField[index].Fill = Brushes.DarkBlue;
+                playerField[index].Fill = Brushes.DarkBlue;
+                return "-";
+            }
+        }
+        private void playerSwapConfig(string playerName, RoutedEventHandler routedEventHandler)
+        {
+            PlayerSwap playerSwap = new PlayerSwap(playerName);
+            playerSwap.ReadyButton.Click += routedEventHandler;
+            currentScreen.Content = playerSwap;
+        }
+
+        private void PlayerReady()
+        {
+            if (Player1Ready)
+            {
+                Player1Ready = false;
+                Player2Ready = true;
+            }
+            else
+            {
+                Player1Ready = true;
+                Player2Ready = false;
+            }
+        }
+
+        private void SwapContentP2(object sender, RoutedEventArgs e)
+        {
+            currentScreen.Content = Player2ShipPlacement;
+        }
+
+        private void PlayerSwapToBoard(object sender, RoutedEventArgs e)
+        {
+            PlayerReady();
+            if (Player1Ready != false)
+            {
+                currentScreen.Content = Player1Board;
+            }
+            else if(Player2Ready != false)
+            {
+                currentScreen.Content = Player2Board;
+            }
+        }
+
+        #endregion
+
+        #region LoadGame
+
+        #endregion
+
+        #region ScoreBoard
+
+        #endregion
+
+        #region Utils
+        private void onClickBack(object sender, RoutedEventArgs e)
+        {
+            MainMenu();
+        }
+
+        private int[] getTileRowAndColumn(GameGridTable field)
+        {
+            int index = field.grid.Children.IndexOf(field.selectedTile);
+            int row = Grid.GetRow(field.grid.Children[index]);
+            int column = Grid.GetColumn(field.grid.Children[index]);
+            return new int[] { row, column };
         }
 
         private bool PlaceShips(ShipPlacement shipPlacement, Game game)
@@ -230,87 +456,52 @@ namespace BattleshipGame.View
 
         private void onClickShot(object sender, RoutedEventArgs e)
         {
-            GameGridTable p1EnemyField = Player1Board.enemyTable;
-            if (p1EnemyField.selectedTile != null)
+            if (battleshipGameAgainstComputer != null)
             {
-                int index = p1EnemyField.grid.Children.IndexOf(p1EnemyField.selectedTile);
-                int row = Grid.GetRow(p1EnemyField.grid.Children[index]);
-                int column = Grid.GetColumn(p1EnemyField.grid.Children[index]);
-                Position pos = new Position(row, column);
-                battleshipGameAgainstComputer.MakeShot(Player1Name, pos);
-                string hit;
-                if (battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerOne)
-                {
-                    p1EnemyField[index].Fill = Brushes.DarkRed;
-                    hit = "X";
-                }
-                else
-                {
-                    p1EnemyField[index].Fill = Brushes.DarkBlue;
-                    hit = "-";
-                }
-                BoardUpdate(Player1Name.PlayerName, boardLabel[column] + "-" + (row + 1), hit);
-
-                if (battleshipGameAgainstComputer.IsGameOver())
-                {
-                    MessageBox.Show("You won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                    MainMenu mainMenu = new MainMenu();
-                    currentScreen.Content = mainMenu;
-                }
-                else
-                {
-                    ComputerShot(battleshipGameAgainstComputer.CreateComputerShot());
-                }
-                p1EnemyField.selectedTile.Stroke = Brushes.Gray;
-                p1EnemyField.selectedTile.StrokeThickness = 1;
-                p1EnemyField.selectedTile = null;
+                AgainstComputer();
+            }
+            else if (battleshipGameWithTwoPlayers != null)
+            {
+                AgainstTwoPlayer();
             }
         }
 
-        private void ComputerShot(Position pos)
+        private void DefaultSelectedTile(GameGridTable field)
         {
-            GameGridTable Player1ShipsField = Player1Board.yourTable;
-            var tile = Player1ShipsField.grid.Children.Cast<Rectangle>().Where(child => Grid.GetRow(child) == pos.Row && Grid.GetColumn(child) == pos.Column).First();
-            if (tile != null)
-            {
-                int index = Player1ShipsField.grid.Children.IndexOf(tile);
-                string hit;
-                if (Player1ShipsField[index].Fill != Brushes.LightSkyBlue)
-                {
-                    Player1ShipsField[index].Fill = Brushes.DarkRed;
-                    hit = "X";
-                }
-                else
-                {
-                    battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerTwo = false;
-                    Player1ShipsField[index].Fill = Brushes.DarkBlue;
-                    hit = "-";
-                }
-
-                battleshipGameAgainstComputer.MakeShot(battleshipGameAgainstComputer.PlayerTwo, pos);
-
-                if (battleshipGameAgainstComputer.IsGameOver())
-                {
-                    MessageBox.Show("You lose!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Player1Board.Shot.Click -= onClickShot;
-                    MainMenu mainMenu = new MainMenu();
-                    currentScreen.Content = mainMenu;
-                }
-
-                BoardUpdate("Computer", boardLabel[pos.Column] + "-" + (pos.Row + 1), hit);
-
-            }
+            field.selectedTile.Stroke = Brushes.Gray;
+            field.selectedTile.StrokeThickness = 1;
+            field.selectedTile = null;
         }
 
         private void BoardUpdate(string player, string guess, string hit)
         {
-            Player1Board.BoardList.Items.Add(new MyItem
+            if (battleshipGameAgainstComputer != null)
             {
-                Turn = battleshipGameAgainstComputer.NumberOfTurns,
-                Player = player,
-                Guess = guess,
-                Hit = hit
-            });
+                Player1Board.BoardList.Items.Add(new MyItem
+                {
+                    Turn = battleshipGameAgainstComputer.NumberOfTurns,
+                    Player = player,
+                    Guess = guess,
+                    Hit = hit
+                });
+            }
+            else if (battleshipGameWithTwoPlayers != null)
+            {
+                Player1Board.BoardList.Items.Add(new MyItem
+                {
+                    Turn = battleshipGameWithTwoPlayers.NumberOfTurns,
+                    Player = player,
+                    Guess = guess,
+                    Hit = hit
+                });
+                Player2Board.BoardList.Items.Add(new MyItem
+                {
+                    Turn = battleshipGameWithTwoPlayers.NumberOfTurns,
+                    Player = player,
+                    Guess = guess,
+                    Hit = hit
+                });
+            }
         }
 
         private class MyItem
@@ -320,46 +511,7 @@ namespace BattleshipGame.View
             public string Guess { get; set; }
             public string Hit { get; set; }
         }
-        #endregion
-
-        #region TwoPlayerGame
-
-        private void PlayerSwapToShipPlacement(object sender, RoutedEventArgs e)
-        {
-            if(Player1Ready != true)
-            {
-                currentScreen.Content = Player1ShipPlacement;
-            }
-            else if(Player2Ready != true){
- 
-                PlayerSwap playerSwap = new PlayerSwap(Player2Name.PlayerName);
-                playerSwap.ReadyButton.Click += SwapContentP2;
-                currentScreen.Content = playerSwap;
-            }
-            else
-            {
-                //TODO - INIT GAME
-            }
-        }
-
-        private void SwapContentP2(object sender, RoutedEventArgs e)
-        {
-            currentScreen.Content = Player2ShipPlacement;
-        }
 
         #endregion
-
-        #region LoadGame
-
-        #endregion
-
-        #region ScoreBoard
-
-        #endregion
-
-        private void onClickBack(object sender, RoutedEventArgs e)
-        {
-            MainMenu();
-        }
     }
 }
