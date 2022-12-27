@@ -12,6 +12,7 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="4*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -22,14 +23,14 @@
         <Label Content="New Game" Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
         <Button x:Name="OnePlayerModeButton" Style="{DynamicResource MenuButtonStyle}" Content="One Player Mode" Grid.Row="2" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand"/>
         <Button x:Name="TwoPlayerModeButton" Style="{DynamicResource MenuButtonStyle}" Content="Two Player Mode" Grid.Row="3" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand"/>
-        <Button Style="{DynamicResource MenuButtonStyle}" Content="Back" Name="Back" Grid.Row="4" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" HorizontalAlignment="Left" Width="250"/>
+        <Button Style="{DynamicResource MenuButtonStyle}" Content="Back" Name="Back" Grid.Row="5" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" HorizontalAlignment="Left" Width="250"/>
 
         <Label x:Name="Player1Label" Content="Player1 Name:" Grid.Row="1" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="#FF000D10" Background="White" Visibility="Hidden"/>
-        <TextBox x:Name="Player1TextBox" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="200" MinHeight="58" FontFamily="Ink Free" FontSize="24" SelectionBrush="Black" Visibility="Hidden"/>
+        <TextBox x:Name="Player1TextBox" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Bottom" MinWidth="200" MinHeight="58" FontFamily="Ink Free" FontSize="24" SelectionBrush="Black" Visibility="Hidden"/>
 
-        <Label x:Name="Player2Label" Content="Player2 Name:" Grid.Row="2" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FF000D10"  Background="White" Visibility="Hidden"/>
-        <TextBox x:Name="Player2TextBox" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Bottom" MinWidth="200" MinHeight="58" FontFamily="Ink Free" FontSize="24" SelectionBrush="Black" Visibility="Hidden"/>
+        <Label x:Name="Player2Label" Content="Player2 Name:" Grid.Row="3" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="#FF000D10"  Background="White" Visibility="Hidden"/>
+        <TextBox x:Name="Player2TextBox" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Bottom" MinWidth="200" MinHeight="58" FontFamily="Ink Free" FontSize="24" SelectionBrush="Black" Visibility="Hidden"/>
 
-        <Button x:Name="StartGameButton" Style="{DynamicResource MenuButtonStyle}" Content="Start Game" Grid.Row="3" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="250" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Button x:Name="StartGameButton" Style="{DynamicResource MenuButtonStyle}" Content="Start Game" Grid.Row="5" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="250" HorizontalAlignment="Right" Visibility="Hidden"/>
     </Grid>
 </UserControl>

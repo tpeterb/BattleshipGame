@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="BattleshipGame.View.PlayerSwap"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BattleshipGame.View"
+        mc:Ignorable="d">
+    <Grid x:Name="PlayerSwapGrid" Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" x:Name="PlayerSwapTextBlock" TextWrapping="WrapWithOverflow" Grid.Row="1"  Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" TextAlignment="Center"></TextBlock>
+        <Button x:Name="ReadyButton" Style="{DynamicResource MenuButtonStyle}" Content="Ready" Grid.Row="2" Grid.Column="1" FontFamily="Ink Free" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" Cursor="Hand" HorizontalAlignment="Center" Width="198" Height="75"/>
+    </Grid>
+</UserControl>
