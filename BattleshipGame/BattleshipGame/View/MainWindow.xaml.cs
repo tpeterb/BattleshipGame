@@ -110,6 +110,7 @@ namespace BattleshipGame.View
                 Player1Ships = new List<Ship>();
                 Player1ShipPlacement = new ShipPlacement(Player1Ships);
                 Player1Board = new Game();
+                Player1Board.playerNameTextBlock.Text = Player1Name.PlayerName;
                 currentScreen.Content = Player1ShipPlacement;
                 Player1ShipPlacement.Confirm.Click += onClickShipPlacement;
                 Player1Board.Shot.Click += onClickShot;
@@ -173,35 +174,54 @@ namespace BattleshipGame.View
                 }
                 BoardUpdate(Player1Name.PlayerName, boardLabel[column]+"-"+(row+1), hit);
 
+                if (battleshipGameAgainstComputer.IsGameOver())
+                {
+                    MessageBox.Show("You won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MainMenu mainMenu = new MainMenu();
+                    currentScreen.Content = mainMenu;
+                }
+                else
+                {
+                    ComputerShot(battleshipGameAgainstComputer.CreateComputerShot());
+                }
                 p1EnemyField.selectedTile.Stroke = Brushes.Gray;
                 p1EnemyField.selectedTile.StrokeThickness = 1;
                 p1EnemyField.selectedTile = null;
-                ComputerShot(battleshipGameAgainstComputer.CreateComputerShot());    
             }
         }
 
         private void ComputerShot(Position pos)
         {
             GameGridTable Player1ShipsField = Player1Board.yourTable;
-            var tile = Player1ShipsField.grid.Children.Cast<Rectangle>().Where(child => Grid.GetRow(child) == pos.Row && Grid.GetColumn(child) == pos.Column).FirstOrDefault();
+            var tile = Player1ShipsField.grid.Children.Cast<Rectangle>().Where(child => Grid.GetRow(child) == pos.Row && Grid.GetColumn(child) == pos.Column).First();
             if(tile != null)
             {
                 int index = Player1ShipsField.grid.Children.IndexOf(tile);
                 string hit;
                 if (Player1ShipsField[index].Fill != Brushes.LightSkyBlue)
                 {
-                    battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerTwo = true;
-                    Player1ShipsField[index].Fill = Brushes.OrangeRed;
+                    Player1ShipsField[index].Fill = Brushes.DarkRed;
                     hit = "X";
                 }
                 else
                 {
                     battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerTwo = false;
-                    Player1ShipsField[index].Fill = Brushes.DarkRed;
+                    Player1ShipsField[index].Fill = Brushes.DarkBlue;
                     hit = "-";
                 }
+
+                battleshipGameAgainstComputer.MakeShot(battleshipGameAgainstComputer.PlayerTwo, pos);
+
+                if (battleshipGameAgainstComputer.IsGameOver())
+                {
+                    MessageBox.Show("You lose!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Player1Board.Shot.Click -= onClickShot;
+                    MainMenu mainMenu = new MainMenu();
+                    currentScreen.Content = mainMenu;
+                }
+
                 BoardUpdate("Computer", boardLabel[pos.Column] + "-" + (pos.Row + 1), hit);
-                battleshipGameAgainstComputer.PlayerTwoGuesses.Add(pos);
+
             }
         }
 
