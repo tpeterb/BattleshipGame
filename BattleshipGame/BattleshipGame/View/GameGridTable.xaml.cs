@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace BattleshipGame.View
@@ -17,6 +10,10 @@ namespace BattleshipGame.View
     /// </summary>
     public partial class GameGridTable : UserControl
     {
+
+        public bool IsTileSelectable { get; set; } = true;
+        public Rectangle selectedTile;
+
         public GameGridTable()
         {
             InitializeComponent();
@@ -30,6 +27,7 @@ namespace BattleshipGame.View
                     tile.StrokeThickness = 1;
                     tile.Stroke = Brushes.Gray;
                     tile.Fill = Brushes.Transparent;
+                    tile.MouseLeftButtonDown += Tile_MouseLeft;
                     grid.Children.Add(tile);
                 }
         }
@@ -38,6 +36,28 @@ namespace BattleshipGame.View
         {
             get => grid.Children[index] as Rectangle;
             set => grid.Children[index] = value;
+        }
+
+        private void Tile_MouseLeft(object sender, MouseEventArgs e)
+        {
+            if(IsTileSelectable && (sender as Rectangle).Fill == Brushes.Transparent)
+            {
+                if (selectedTile != null)
+                {
+                    selectedTile.Stroke = Brushes.Gray;
+                    selectedTile.StrokeThickness = 1;
+                }
+                if (selectedTile != (Rectangle)sender)
+                {
+                    selectedTile = sender as Rectangle;
+                    selectedTile.Stroke = Brushes.Black;
+                    selectedTile.StrokeThickness = 2;
+                }
+                else
+                {
+                    selectedTile = null;
+                }
+            }
         }
     }
 }

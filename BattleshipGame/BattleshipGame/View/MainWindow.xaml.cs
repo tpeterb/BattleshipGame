@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 
 // Declared class imports
 using BattleshipGame.Model;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BattleshipGame.View
 {
@@ -27,11 +28,16 @@ namespace BattleshipGame.View
     /// 
     public partial class MainWindow : Window
     {
-
+        private Player Player1Name;
+        private Player Player2Name;
         private ShipPlacement Player1ShipPlacement;
         private ShipPlacement Player2ShipPlacement;
+        private List<Ship> Player1Ships;
+        private List<Ship> Player2Ships;
         private Game Player1Board;
         private Game Player2Board;
+        private BattleshipGameAgainstComputer battleshipGameAgainstComputer;
+        private string[] boardLabel = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
         public MainWindow()
         {
@@ -100,11 +106,13 @@ namespace BattleshipGame.View
             string playerName = newGame.Player1TextBox.Text;
             try
             {
-                Player player = new Player(PlayerType.Human, playerName);
-                Player1ShipPlacement = new ShipPlacement();
+                Player1Name = new Player(PlayerType.Human, playerName);
+                Player1Ships = new List<Ship>();
+                Player1ShipPlacement = new ShipPlacement(Player1Ships);
                 Player1Board = new Game();
                 currentScreen.Content = Player1ShipPlacement;
                 Player1ShipPlacement.Confirm.Click += onClickShipPlacement;
+                Player1Board.Shot.Click += onClickShot;
             }
             catch(Exception ex)
             {
@@ -120,9 +128,13 @@ namespace BattleshipGame.View
         {
             if (PlaceShips(Player1ShipPlacement, Player1Board))
             {
+                battleshipGameAgainstComputer = new BattleshipGameAgainstComputer(Player1Name, Player1Ships);
+                if (battleshipGameAgainstComputer.PlayerNameToMove != Player1Name.PlayerName)
+                {
+                    ComputerShot(battleshipGameAgainstComputer.CreateComputerShot());
+                }
                 currentScreen.Content = Player1Board;
             }
-
         }
 
         private bool PlaceShips(ShipPlacement shipPlacement, Game game)
@@ -138,6 +150,78 @@ namespace BattleshipGame.View
             return true;
         }
 
+        private void onClickShot(object sender, RoutedEventArgs e)
+        {
+            GameGridTable p1EnemyField = Player1Board.enemyTable;
+            if(p1EnemyField.selectedTile != null)
+            {
+                int index = p1EnemyField.grid.Children.IndexOf(p1EnemyField.selectedTile);
+                int row = Grid.GetRow(p1EnemyField.grid.Children[index]);
+                int column = Grid.GetColumn(p1EnemyField.grid.Children[index]);
+                Position pos = new Position(row, column);
+                battleshipGameAgainstComputer.MakeShot(Player1Name, pos);
+                string hit;
+                if (battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerOne)
+                {
+                    p1EnemyField[index].Fill = Brushes.DarkRed;
+                    hit = "X";
+                }
+                else
+                {
+                    p1EnemyField[index].Fill = Brushes.DarkBlue;
+                    hit = "-";
+                }
+                BoardUpdate(Player1Name.PlayerName, boardLabel[column]+"-"+(row+1), hit);
+
+                p1EnemyField.selectedTile.Stroke = Brushes.Gray;
+                p1EnemyField.selectedTile.StrokeThickness = 1;
+                p1EnemyField.selectedTile = null;
+                ComputerShot(battleshipGameAgainstComputer.CreateComputerShot());    
+            }
+        }
+
+        private void ComputerShot(Position pos)
+        {
+            GameGridTable Player1ShipsField = Player1Board.yourTable;
+            var tile = Player1ShipsField.grid.Children.Cast<Rectangle>().Where(child => Grid.GetRow(child) == pos.Row && Grid.GetColumn(child) == pos.Column).FirstOrDefault();
+            if(tile != null)
+            {
+                int index = Player1ShipsField.grid.Children.IndexOf(tile);
+                string hit;
+                if (Player1ShipsField[index].Fill != Brushes.LightSkyBlue)
+                {
+                    battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerTwo = true;
+                    Player1ShipsField[index].Fill = Brushes.OrangeRed;
+                    hit = "X";
+                }
+                else
+                {
+                    battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerTwo = false;
+                    Player1ShipsField[index].Fill = Brushes.DarkRed;
+                    hit = "-";
+                }
+                BoardUpdate("Computer", boardLabel[pos.Column] + "-" + (pos.Row + 1), hit);
+                battleshipGameAgainstComputer.PlayerTwoGuesses.Add(pos);
+            }
+        }
+
+        private void BoardUpdate(string player, string guess, string hit)
+        {
+            Player1Board.BoardList.Items.Add(new MyItem { 
+                Turn = battleshipGameAgainstComputer.NumberOfTurns,
+                Player = player,
+                Guess = guess,
+                Hit = hit
+            });
+        }
+
+        private class MyItem
+        {
+            public int Turn { get; set; }
+            public string Player { get; set; }
+            public string Guess { get; set; }
+            public string Hit { get; set; }
+        }
         #endregion
 
         #region LoadGame

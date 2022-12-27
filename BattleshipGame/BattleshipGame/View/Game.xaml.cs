@@ -20,6 +20,7 @@ namespace BattleshipGame.View
         public Game()
         {
             InitializeComponent();
+            yourTable.IsTileSelectable = false;
         }
     }
 }

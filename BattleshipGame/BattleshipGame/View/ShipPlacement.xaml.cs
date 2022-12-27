@@ -25,13 +25,15 @@ namespace BattleshipGame.View
         private ShipType selectedShipType;
         private int selectedShipSize;
         private ShipOrientation shipOrientation = ShipOrientation.Horizontal;
-        private List<Ship> ships = new List<Ship>();
+        private List<Ship> _ships;
 
-        public ShipPlacement()
+        public ShipPlacement(List<Ship> ships)
         {
             InitializeComponent();
+            _ships = ships;
             foreach (Rectangle tile in field.grid.Children)
             {
+                tile.Fill = Brushes.LightSkyBlue;
                 tile.MouseLeftButtonDown += Tile_MouseLeftButtonDown;
                 tile.MouseMove += cellMouseMove;
                 tile.MouseLeave += cellMouseLeave;
@@ -41,7 +43,7 @@ namespace BattleshipGame.View
         private void ShipText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if(selectedShip != null)
-                selectedShip.Background = Brushes.Transparent;
+                selectedShip.Background = Brushes.LightSkyBlue;
 
             selectedShip = sender as TextBlock;
             selectedShip.Background = Brushes.Green;
@@ -74,7 +76,7 @@ namespace BattleshipGame.View
 
         private void Tile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(selectedShip != null && selectedTile != null)
+            if(selectedShip != null && selectedTile != null && selectedTile.Fill != Brushes.Black)
             {
                 int index = field.grid.Children.IndexOf(selectedTile);
                 int row = Grid.GetRow(field.grid.Children[index]);
@@ -86,29 +88,39 @@ namespace BattleshipGame.View
                     Position pos;
                     if (shipOrientation == ShipOrientation.Horizontal)
                     {
-                        pos = new Position(row, column+i);
+                        if (column + i < 10)
+                        {
+                            pos = new Position(row, column + i);
+                            shipPositions.Add(pos);
+                        }
                     }
                     else
                     {
-                        pos = new Position(row+i, column);
+                        if(row + i < 10)
+                        {
+                            pos = new Position(row + i, column);
+                            shipPositions.Add(pos);
+                        }
                     }
-                    shipPositions.Add(pos);
+
                 }
-
-                Ship ship = new Ship(selectedShipType, shipPositions);
-                ships.Add(ship);
-
-                if (ships.Count == 5)
+                if (shipPositions.Count == selectedShipSize)
                 {
-                    Rotate.Visibility = Visibility.Hidden;
-                    Confirm.Visibility = Visibility.Visible;
-                }
+                    Ship ship = new Ship(selectedShipType, shipPositions);
+                    _ships.Add(ship);
 
-                HelperPlaceShip(index, Brushes.Black);
-                selectedShip.Visibility = Visibility.Hidden;
-                selectedTile = null;
-                selectedShip = null;
-                selectedShipSize = 0;
+                    if (_ships.Count == 5)
+                    {
+                        Rotate.Visibility = Visibility.Hidden;
+                        Confirm.Visibility = Visibility.Visible;
+                    }
+
+                    HelperPlaceShip(index, Brushes.Black);
+                    selectedShip.Visibility = Visibility.Hidden;
+                    selectedTile = null;
+                    selectedShip = null;
+                    selectedShipSize = -1;
+                }
             }
         }
 
@@ -165,7 +177,7 @@ namespace BattleshipGame.View
             if(selectedTile != null)
             {
                 selectedTile = sender as Rectangle;
-                HelperPlaceShip(field.grid.Children.IndexOf(selectedTile), Brushes.Transparent);
+                HelperPlaceShip(field.grid.Children.IndexOf(selectedTile), Brushes.LightSkyBlue);
             }
         }
 

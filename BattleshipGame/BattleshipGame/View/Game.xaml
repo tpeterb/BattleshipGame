@@ -11,12 +11,27 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <local:GameGridTable x:Name="yourTable" VerticalAlignment="Center" Margin="20 0 0 0"/>
-            <local:GameGridTable VerticalAlignment="Center" Margin="60 0 20 0"/>
-            <StackPanel VerticalAlignment="Center" Orientation="Vertical" Margin="0 0 20 0">
-                <Label x:Name="NumberOfRoundsLabel" Content="NumberOfRounds: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
-                <Label x:Name="NumberOfYourHitsLabel" Content="NumberOfYourHits: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
-                <Label x:Name="NumberOfOpponentHitsLabel" Content="NumberOfOpponentHits: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
-                <Label x:Name="ShipsLabel" Content="Ships: " FontWeight="Bold" FontFamily="Ink Free" FontSize="20" HorizontalAlignment="Left" Foreground="#FF000D10"  Background="White"/>
+            <local:GameGridTable x:Name="enemyTable" VerticalAlignment="Center" Margin="60 0 20 0"/>
+            <StackPanel VerticalAlignment="Top" Orientation="Vertical" Margin="0 0 20 0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.75*"/>
+                        <RowDefinition Height="0.25*"/>
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="BoardList" Grid.Row="0" VerticalAlignment="Top">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Turn" Width="100" DisplayMemberBinding="{Binding Turn}" />
+                                <GridViewColumn Header="Player" Width="100" DisplayMemberBinding="{Binding Player}" />
+                                <GridViewColumn Header="Guesses" Width="100" DisplayMemberBinding="{Binding Guess}" />
+                                <GridViewColumn Header="Hits" Width="100" DisplayMemberBinding="{Binding Hit}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </StackPanel>
+            <StackPanel VerticalAlignment="Center">
+                <Button x:Name="Shot" Style="{DynamicResource MenuButtonStyle}" Content="Shot" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" Cursor="Hand" Width="150"/>
             </StackPanel>
         </StackPanel>
 
