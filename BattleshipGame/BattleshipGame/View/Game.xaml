@@ -7,28 +7,29 @@
         mc:Ignorable="d">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <StackPanel Margin="0 0 0 40">
-            <TextBlock Text="PlayerName"/>
+            <TextBlock Text="" FontSize="24" TextAlignment="Center" x:Name="playerNameTextBlock"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <local:GameGridTable x:Name="yourTable" VerticalAlignment="Center" Margin="20 0 0 0"/>
-            <local:GameGridTable x:Name="enemyTable" VerticalAlignment="Center" Margin="60 0 20 0"/>
+            <StackPanel>
+                <Label Content="Your Table" FontWeight="Bold" FontFamily="Ink Free" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10"  Background="White" Margin="0 0 0 40"/>
+                <local:GameGridTable x:Name="yourTable" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Margin="20 0 20 0">
+                <Label Content="Opponent Table" FontWeight="Bold" FontFamily="Ink Free" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10"  Background="White"/>
+                <Label Content="Click on a cell to make a hit!" FontWeight="Bold" FontFamily="Ink Free" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FF000D10"  Background="White" Margin="0 0 0 7.8"/>
+                <local:GameGridTable x:Name="enemyTable" VerticalAlignment="Center"/>
+            </StackPanel>
             <StackPanel VerticalAlignment="Top" Orientation="Vertical" Margin="0 0 20 0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0.75*"/>
-                        <RowDefinition Height="0.25*"/>
-                    </Grid.RowDefinitions>
-                    <ListView x:Name="BoardList" Grid.Row="0" VerticalAlignment="Top">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Turn" Width="100" DisplayMemberBinding="{Binding Turn}" />
-                                <GridViewColumn Header="Player" Width="100" DisplayMemberBinding="{Binding Player}" />
-                                <GridViewColumn Header="Guesses" Width="100" DisplayMemberBinding="{Binding Guess}" />
-                                <GridViewColumn Header="Hits" Width="100" DisplayMemberBinding="{Binding Hit}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </Grid>
+                <ListView x:Name="BoardList" Grid.Row="0" VerticalAlignment="Top" Height="440">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Turn" Width="100" DisplayMemberBinding="{Binding Turn}" />
+                            <GridViewColumn Header="Player" Width="100" DisplayMemberBinding="{Binding Player}" />
+                            <GridViewColumn Header="Guesses" Width="100" DisplayMemberBinding="{Binding Guess}" />
+                            <GridViewColumn Header="Hits" Width="100" DisplayMemberBinding="{Binding Hit}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </StackPanel>
             <StackPanel VerticalAlignment="Center">
                 <Button x:Name="Shot" Style="{DynamicResource MenuButtonStyle}" Content="Shot" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" Cursor="Hand" Width="150"/>

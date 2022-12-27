@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BattleshipGame.View"
         mc:Ignorable="d">
-
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
         <local:GameGridTable x:Name="field" VerticalAlignment="Center"/>
         <StackPanel>

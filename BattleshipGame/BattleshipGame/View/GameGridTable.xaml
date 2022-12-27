@@ -29,29 +29,29 @@
             <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <TextBlock Text="A"/>
-            <TextBlock Text="B"/>
-            <TextBlock Text="C"/>
-            <TextBlock Text="D"/>
-            <TextBlock Text="E"/>
-            <TextBlock Text="F"/>
-            <TextBlock Text="G"/>
-            <TextBlock Text="H"/>
-            <TextBlock Text="I"/>
-            <TextBlock Text="J"/>
+            <TextBlock Text="A" TextAlignment="Center"/>
+            <TextBlock Text="B" TextAlignment="Center"/>
+            <TextBlock Text="C" TextAlignment="Center"/>
+            <TextBlock Text="D" TextAlignment="Center"/>
+            <TextBlock Text="E" TextAlignment="Center"/>
+            <TextBlock Text="F" TextAlignment="Center"/>
+            <TextBlock Text="G" TextAlignment="Center"/>
+            <TextBlock Text="H" TextAlignment="Center"/>
+            <TextBlock Text="I" TextAlignment="Center"/>
+            <TextBlock Text="J" TextAlignment="Center"/>
         </StackPanel>
         <UniformGrid Name="grid" Grid.Row="1" Grid.Column="1" Rows="10" Columns="10" Background="LightBlue" Width="300" Height="300" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
         <StackPanel Grid.Row="1">
-            <TextBlock Text="1"/>
-            <TextBlock Text="2"/>
-            <TextBlock Text="3"/>
-            <TextBlock Text="4"/>
-            <TextBlock Text="5"/>
-            <TextBlock Text="6"/>
-            <TextBlock Text="7"/>
-            <TextBlock Text="8"/>
-            <TextBlock Text="9"/>
-            <TextBlock Text="10"/>
+            <TextBlock Text="1" TextAlignment="Center"/>
+            <TextBlock Text="2" TextAlignment="Center"/>
+            <TextBlock Text="3" TextAlignment="Center"/>
+            <TextBlock Text="4" TextAlignment="Center"/>
+            <TextBlock Text="5" TextAlignment="Center"/>
+            <TextBlock Text="6" TextAlignment="Center"/>
+            <TextBlock Text="7" TextAlignment="Center"/>
+            <TextBlock Text="8" TextAlignment="Center"/>
+            <TextBlock Text="9" TextAlignment="Center"/>
+            <TextBlock Text="10" TextAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>

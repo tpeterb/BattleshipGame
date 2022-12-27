@@ -7,16 +7,16 @@
 
     <Grid x:Name="MainMenuGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"></ColumnDefinition>
-            <ColumnDefinition Width="600"></ColumnDefinition>
-            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Content="Main Menu" Grid.Row="0"  Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
         <Button Style="{DynamicResource MenuButtonStyle}" Content="New Game" Name="NewGame" Grid.Row="1" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand"/>
