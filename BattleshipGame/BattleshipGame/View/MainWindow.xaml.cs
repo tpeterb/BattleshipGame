@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +19,8 @@ using System.Windows.Shapes;
 
 // Declared class imports
 using BattleshipGame.Model;
+using BattleshipGame.Repositories;
+using BattleshipGame.Repositories.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BattleshipGame.View
@@ -82,6 +85,11 @@ namespace BattleshipGame.View
             ScoreBoard scoreBoard = new ScoreBoard();
             scoreBoard.Back.Click += onClickBack;
             currentScreen.Content = scoreBoard;
+            var matchScores = MatchScoreRepository.GetMatchScores();
+            foreach(var match in matchScores)
+            {
+                scoreBoard.ScoreBoardListView.Items.Add(match);
+            }
         }
 
         private void onClickQuit(object sender, RoutedEventArgs e)
@@ -194,7 +202,7 @@ namespace BattleshipGame.View
 
         private void onClickShipPlacementTwoPlayer(object sender, RoutedEventArgs e)
         {
-            if(Player1Ready != true)
+            if (Player1Ready != true)
             {
                 if (PlaceShips(Player1ShipPlacement, Player1Board))
                 {
@@ -202,7 +210,7 @@ namespace BattleshipGame.View
                     PlayerSwapToShipPlacement(sender, e);
                 }
             }
-            else if(Player2Ready != true)
+            else if (Player2Ready != true)
             {
                 if (PlaceShips(Player2ShipPlacement, Player2Board))
                 {
@@ -261,7 +269,7 @@ namespace BattleshipGame.View
             if (tile != null)
             {
                 string hit = GameFieldComputerProcessOnePlayerMode(Player1ShipsField, tile);
-              
+
                 battleshipGameAgainstComputer.MakeShot(battleshipGameAgainstComputer.PlayerTwo, pos);
 
                 if (battleshipGameAgainstComputer.IsGameOver())
@@ -298,13 +306,13 @@ namespace BattleshipGame.View
 
         private void PlayerSwapToShipPlacement(object sender, RoutedEventArgs e)
         {
-            if(Player1Ready != true){
+            if (Player1Ready != true) {
                 currentScreen.Content = Player1ShipPlacement;
             }
-            else if(Player2Ready != true){
+            else if (Player2Ready != true) {
                 playerSwapConfig(Player2Name.PlayerName, SwapContentP2);
             }
-            else{
+            else {
                 battleshipGameWithTwoPlayers = new BattleshipGameWithTwoPlayers(Player1Name, Player2Name, Player1Ships, Player2Ships);
                 playerSwapConfig(battleshipGameWithTwoPlayers.PlayerNameToMove, PlayerSwapToBoard);
                 if (Player1Name.PlayerName != battleshipGameWithTwoPlayers.PlayerNameToMove)
@@ -314,7 +322,6 @@ namespace BattleshipGame.View
 
         private void AgainstTwoPlayer()
         {
-
             if (Player1Ready)
             {
                 GameGridTable p2Field = Player2Board.yourTable;
@@ -348,11 +355,22 @@ namespace BattleshipGame.View
 
             if (battleshipGameWithTwoPlayers.IsGameOver())
             {
+                SaveMatchScore(
+                    Player1Name,
+                    Player2Name,
+                    battleshipGameWithTwoPlayers.PlayerOneHits.ToString(),
+                    battleshipGameWithTwoPlayers.PlayerTwoHits.ToString(),
+                    battleshipGameWithTwoPlayers.NumberOfTurns,
+                    battleshipGameWithTwoPlayers.WinnerPlayerName
+                    );
+
                 MessageBox.Show(battleshipGameWithTwoPlayers.WinnerPlayerName + " won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 MainMenu();
+
             }
             else
             {
+                PlayerReady();
                 playerSwapConfig(battleshipGameWithTwoPlayers.PlayerNameToMove, PlayerSwapToBoard);
             }
         }
@@ -406,12 +424,11 @@ namespace BattleshipGame.View
 
         private void PlayerSwapToBoard(object sender, RoutedEventArgs e)
         {
-            PlayerReady();
             if (Player1Ready != false)
             {
                 currentScreen.Content = Player1Board;
             }
-            else if(Player2Ready != false)
+            else if (Player2Ready != false)
             {
                 currentScreen.Content = Player2Board;
             }
@@ -424,6 +441,8 @@ namespace BattleshipGame.View
         #endregion
 
         #region ScoreBoard
+
+
 
         #endregion
 
@@ -510,6 +529,20 @@ namespace BattleshipGame.View
             public string Player { get; set; }
             public string Guess { get; set; }
             public string Hit { get; set; }
+        }
+
+        private void SaveMatchScore(Player p1, Player p2, string p1Hits, string p2Hits, int numberOfTurns, string winnerPlayer){
+            MatchScore score = new MatchScore()
+            {
+                PlayerName1 = p1.PlayerName,
+                PlayerName2 = p2.PlayerName,
+                Player1Hits = p1Hits,
+                Player2Hits = p2Hits,
+                NumberOfTurns = numberOfTurns,
+                WinnerPlayerName = winnerPlayer
+            };
+
+            MatchScoreRepository.StoreMatchScore(score);
         }
 
         #endregion

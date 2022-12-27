@@ -18,28 +18,28 @@
             <ColumnDefinition Width="50"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Content="Scoreboard" Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
-        <ListView FontFamily="Ink Free" FontWeight="Bold" FontSize="14" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Foreground="White" Background="#FF000D10">
+        <ListView x:Name="ScoreBoardListView" FontFamily="Ink Free" FontWeight="Bold" FontSize="14" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Foreground="White" Background="#FF000D10">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="100">
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Id}">
                         <GridViewColumnHeader>Match Number</GridViewColumnHeader>
                     </GridViewColumn>
-                    <GridViewColumn Width="100">
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding PlayerName1}">
                         <GridViewColumnHeader>Player1 Name</GridViewColumnHeader>
                     </GridViewColumn>
-                    <GridViewColumn Width="100">
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding PlayerName2}">
                         <GridViewColumnHeader>Player2 Name</GridViewColumnHeader>
                     </GridViewColumn>
-                    <GridViewColumn Width="100">
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Player1Hits}">
                         <GridViewColumnHeader>Player1 Hits</GridViewColumnHeader>
                     </GridViewColumn>
-                    <GridViewColumn Width="100">
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Player2Hits}">
                         <GridViewColumnHeader>Player2 Hits</GridViewColumnHeader>
                     </GridViewColumn>
-                    <GridViewColumn Width="100">
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding NumberOfTurns}">
                         <GridViewColumnHeader>Rounds</GridViewColumnHeader>
                     </GridViewColumn>
-                    <GridViewColumn Width="100">
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding WinnerPlayerName}">
                         <GridViewColumnHeader>Winner</GridViewColumnHeader>
                     </GridViewColumn>
                 </GridView>
