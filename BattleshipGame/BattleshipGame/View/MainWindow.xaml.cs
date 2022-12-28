@@ -1,6 +1,7 @@
 ﻿// Sytem imports
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -57,11 +58,9 @@ namespace BattleshipGame.View
         {
             MainMenu mainMenu = new MainMenu();
             mainMenu.NewGame.Click += onClickNewGame;
-            mainMenu.LoadGame.Click += onClickLoadGame;
             mainMenu.Scoreboard.Click += onClickScoreBoard;
             mainMenu.Quit.Click += onClickQuit;
             currentScreen.Content = mainMenu;
-
         }
 
         private void onClickNewGame(object sender, RoutedEventArgs e)
@@ -73,17 +72,11 @@ namespace BattleshipGame.View
             currentScreen.Content = newGame;
         }
 
-        private void onClickLoadGame(object sender, RoutedEventArgs e)
-        {
-            LoadMenu loadMenu = new LoadMenu();
-            loadMenu.Back.Click += onClickBack;
-            currentScreen.Content = loadMenu;
-        }
-
         private void onClickScoreBoard(object sender, RoutedEventArgs e)
         {
             ScoreBoard scoreBoard = new ScoreBoard();
             scoreBoard.Back.Click += onClickBack;
+            scoreBoard.Replay.Click += (sender, EventArgs) => onClickReplay(sender, EventArgs, scoreBoard);
             currentScreen.Content = scoreBoard;
             var matchScores = MatchScoreRepository.GetMatchScores();
             foreach(var match in matchScores)
@@ -232,6 +225,7 @@ namespace BattleshipGame.View
                 if (battleshipGameAgainstComputer.IsGameOver())
                 {
                     MessageBox.Show("You won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    SaveComputerGame();
                     MainMenu();
                 }
                 else
@@ -275,6 +269,7 @@ namespace BattleshipGame.View
                 if (battleshipGameAgainstComputer.IsGameOver())
                 {
                     MessageBox.Show("You lose!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    SaveComputerGame();
                     Player1Board.Shot.Click -= onClickShot;
                     MainMenu();
                 }
@@ -282,6 +277,19 @@ namespace BattleshipGame.View
                 BoardUpdate("Computer", boardLabel[pos.Column] + "-" + (pos.Row + 1), hit);
 
             }
+        }
+
+        private void SaveComputerGame()
+        {
+            SaveMatchScore(
+                Player1Name,
+                battleshipGameAgainstComputer.PlayerTwo,
+                battleshipGameAgainstComputer.PlayerOneHits.ToString(),
+                battleshipGameAgainstComputer.PlayerTwoHits.ToString(),
+                battleshipGameAgainstComputer.NumberOfTurns,
+                battleshipGameAgainstComputer.WinnerPlayerName
+                );
+            SaveAllMatchDataAgainstComputer(battleshipGameAgainstComputer);
         }
 
         private string GameFieldComputerProcessOnePlayerMode(GameGridTable field, Rectangle tile)
@@ -363,10 +371,10 @@ namespace BattleshipGame.View
                     battleshipGameWithTwoPlayers.NumberOfTurns,
                     battleshipGameWithTwoPlayers.WinnerPlayerName
                     );
+                SaveAllMatchDataTwoPlayer(battleshipGameWithTwoPlayers);
 
                 MessageBox.Show(battleshipGameWithTwoPlayers.WinnerPlayerName + " won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 MainMenu();
-
             }
             else
             {
@@ -383,7 +391,24 @@ namespace BattleshipGame.View
             int column = tileRowAndColumn[1];
             Position pos = new Position(row, column);
             battleshipGameWithTwoPlayers.MakeShot(player, pos);
-            if (battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerOne)
+            Boolean sinking = false;
+
+            if (Player1Ready)
+            {
+                if (battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerOne)
+                {
+                    sinking = true;
+                }
+            }
+            else
+            {
+                if (battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerTwo)
+                {
+                    sinking = true;
+                }
+            }
+
+            if (sinking)
             {
                 enemyField[index].Fill = Brushes.DarkRed;
                 playerField[index].Fill = Brushes.DarkRed;
@@ -395,6 +420,7 @@ namespace BattleshipGame.View
                 playerField[index].Fill = Brushes.DarkBlue;
                 return "-";
             }
+       
         }
         private void playerSwapConfig(string playerName, RoutedEventHandler routedEventHandler)
         {
@@ -442,7 +468,17 @@ namespace BattleshipGame.View
 
         #region ScoreBoard
 
+        private void onClickReplay(object sender, RoutedEventArgs e, ScoreBoard board)
+        {
+            if (board.ScoreBoardListView.SelectedItems.Count > 0)
+            {
+                MatchScore matchScore = (MatchScore)board.ScoreBoardListView.SelectedItems[0];
+                MatchSaveAndReplay match = MatchSaveAndReplayRepository.GetMatchId(matchScore.Id);
 
+                ReplayGame game = new ReplayGame(match);
+                currentScreen.Content = game;
+            }
+        }
 
         #endregion
 
@@ -544,7 +580,46 @@ namespace BattleshipGame.View
 
             MatchScoreRepository.StoreMatchScore(score);
         }
+        private void SaveAllMatchDataAgainstComputer(BattleshipGameAgainstComputer game)
+        {
+            MatchSaveAndReplay match = new MatchSaveAndReplay()
+            {
+                PlayerName1 = game.PlayerOne.PlayerName,
+                PlayerName2 = game.PlayerTwo.PlayerName,
+                NumberOfTurns = game.NumberOfTurns,
+                Player1Guesses = string.Join(";", game.PlayerOneGuesses.Select(o => o.ToString())),
+                Player2Guesses = string.Join(";", game.PlayerTwoGuesses.Select(o => o.ToString())),
+                Player1OriginalShips = string.Join(";", game.PlayerOneOriginalShips.Select(o => o.ToString())),
+                Player2OriginalShips = string.Join(";", game.PlayerTwoOriginalShips.Select(o => o.ToString())),
+                Player1CurrentShips = string.Join(";", game.PlayerOneCurrentShips.Select(o => o.ToString())),
+                Player2CurrentShips = string.Join(";", game.PlayerTwoCurrentShips.Select(o => o.ToString())),
+                PlayerToStart = game.PlayerOne.PlayerName,
+                Type = MatchType.Replay,
+            };
 
+            MatchSaveAndReplayRepository.StoreMatchSaveAndReplay(match);
+        }
+
+        private void SaveAllMatchDataTwoPlayer(BattleshipGameWithTwoPlayers game)
+        {
+            MatchSaveAndReplay match = new MatchSaveAndReplay()
+            {
+               PlayerName1 = game.PlayerOne.PlayerName,
+               PlayerName2 = game.PlayerTwo.PlayerName,
+               NumberOfTurns = game.NumberOfTurns,
+               Player1Guesses = string.Join(";",game.PlayerOneGuesses.Select(o => o.ToString())),
+               Player2Guesses = string.Join(";", game.PlayerTwoGuesses.Select(o => o.ToString())),
+               Player1OriginalShips = string.Join(";", game.PlayerOneOriginalShips.Select(o => o.ToString())),
+               Player2OriginalShips = string.Join(";", game.PlayerTwoOriginalShips.Select(o => o.ToString())),
+               Player1CurrentShips = string.Join(";", game.PlayerOneCurrentShips.Select(o => o.ToString())),
+               Player2CurrentShips = string.Join(";", game.PlayerTwoCurrentShips.Select(o => o.ToString())),
+               PlayerToStart = game.PlayerOne.PlayerName,
+               Type = MatchType.Replay,
+            };
+
+            MatchSaveAndReplayRepository.StoreMatchSaveAndReplay(match);
+        }
+        
         #endregion
     }
 }

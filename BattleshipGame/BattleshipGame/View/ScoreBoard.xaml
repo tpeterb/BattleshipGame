@@ -45,6 +45,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Style="{DynamicResource MenuButtonStyle}" Content="Back" Name="Back" Grid.Row="4" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand"/>
+        <Button Style="{DynamicResource MenuButtonStyle}" Content="Replay" Name="Replay" Grid.Row="4" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="300" HorizontalAlignment="Right"/>
+        <Button Style="{DynamicResource MenuButtonStyle}" Content="Back" Name="Back" Grid.Row="4" Grid.Column="1" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" VerticalAlignment="Center" Cursor="Hand" Width="300" HorizontalAlignment="Left"/>
     </Grid>
 </UserControl>

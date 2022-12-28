@@ -16,7 +16,7 @@
             <ColumnDefinition Width="696"></ColumnDefinition>
             <ColumnDefinition Width="52"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Content="Load Game" Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
+        <Label Content="Replays" Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
         <ListView FontFamily="Ink Free" FontWeight="Bold" FontSize="14" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Foreground="White" Background="#FF000D10">
             <ListView.View>
                 <GridView>

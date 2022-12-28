@@ -96,5 +96,10 @@ namespace BattleshipGame.Model
         {
             return (TypeOfShip, ShipPositions, OriginalShipSize, Destroyed).GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return TypeOfShip.ToString() + "," + Destroyed.ToString() + "," + OriginalShipSize.ToString() + ",["+ string.Join(",", ShipPositions.Select(o => o.ToString()))+"]";
+        }
     }
 }

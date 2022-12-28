@@ -67,5 +67,10 @@ namespace BattleshipGame.Model
         {
             return (Row, Column).GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return "["+Row.ToString() + "-" + Column.ToString()+"]";
+        }
     }
 }

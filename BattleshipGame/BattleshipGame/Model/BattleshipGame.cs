@@ -160,6 +160,7 @@ namespace BattleshipGame.Model
             List<bool> playerTwoShipDestroyedStates = PlayerTwoCurrentShips.Select(ship => ship.Destroyed).ToList();
             if (!playerTwoShipDestroyedStates.Contains(false))
             {
+                WinnerPlayerName = PlayerOne.PlayerName;
                 return true;
             }
             return false;
@@ -170,6 +171,7 @@ namespace BattleshipGame.Model
             List<bool> playerOneShipDestroyedStates = PlayerOneCurrentShips.Select(ship => ship.Destroyed).ToList();
             if (!playerOneShipDestroyedStates.Contains(false))
             {
+                WinnerPlayerName = PlayerTwo.PlayerName;
                 return true;
             }
             return false;
