@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BattleshipGame.View
 {
@@ -21,6 +22,11 @@ namespace BattleshipGame.View
         {
             InitializeComponent();
             yourTable.IsTileSelectable = false;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(Shot);
         }
     }
 }

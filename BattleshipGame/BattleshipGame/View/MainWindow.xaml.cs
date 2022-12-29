@@ -23,6 +23,7 @@ using BattleshipGame.Model;
 using BattleshipGame.Repositories;
 using BattleshipGame.Repositories.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Key = System.Windows.Input.Key;
 
 namespace BattleshipGame.View
 {
@@ -130,6 +131,7 @@ namespace BattleshipGame.View
                 Player1Ships = new List<Ship>();
                 Player1ShipPlacement = new ShipPlacement(Player1Ships);
                 Player1Board = new Game();
+                Player1Board.KeyUp += ShowAIShips;
                 Player1Board.playerNameTextBlock.Text = Player1Name.PlayerName;
                 currentScreen.Content = Player1ShipPlacement;
                 Player1ShipPlacement.Confirm.Click += onClickShipPlacementAI;
@@ -179,6 +181,18 @@ namespace BattleshipGame.View
         #endregion
 
         #region OneplayerGame
+
+        private void ShowAIShips(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F1)
+            {
+                if (!Application.Current.Windows.OfType<AIShips>().Any())
+                {
+                    AIShips AIShipsWindow = new AIShips(battleshipGameAgainstComputer.PlayerTwoOriginalShips);
+                    AIShipsWindow.Show();
+                }
+            }
+        }
 
         private void onClickShipPlacementAI(object sender, RoutedEventArgs e)
         {
