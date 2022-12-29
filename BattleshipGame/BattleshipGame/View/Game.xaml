@@ -14,11 +14,25 @@
             <StackPanel>
                 <Label Content="Your Table" FontWeight="Bold" FontFamily="Ink Free" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10"  Background="White" Margin="0 0 0 40"/>
                 <local:GameGridTable x:Name="yourTable" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0" x:Name="P1ShipsSunk">
+                    <TextBlock Text="AircraftCarrier" Name="P1AircraftCarrier" Margin="0,0,10,0"/>
+                    <TextBlock Text="Battleship" Name="P1Battleship" Margin="0,0,10,0"/>
+                    <TextBlock Text="Cruiser" Name="P1Cruiser" Margin="0,0,10,0"/>
+                    <TextBlock Text="Submarine" Name="P1Submarine" Margin="0,0,10,0"/>
+                    <TextBlock Text="Destroyer" Name="P1Destroyer" Margin="0,0,10,0"/>
+                </StackPanel>
             </StackPanel>
             <StackPanel Margin="20 0 20 0">
                 <Label Content="Opponent Table" FontWeight="Bold" FontFamily="Ink Free" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10"  Background="White"/>
                 <Label Content="Click on a cell to make a hit!" FontWeight="Bold" FontFamily="Ink Free" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FF000D10"  Background="White" Margin="0 0 0 7.8"/>
                 <local:GameGridTable x:Name="enemyTable" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0" x:Name="P2ShipsSunk">
+                    <TextBlock Text="AircraftCarrier" Name="P2AircraftCarrier" Margin="0,0,10,0"/>
+                    <TextBlock Text="Battleship" Name="P2Battleship" Margin="0,0,10,0"/>
+                    <TextBlock Text="Cruiser" Name="P2Cruiser" Margin="0,0,10,0"/>
+                    <TextBlock Text="Submarine" Name="P2Submarine" Margin="0,0,10,0"/>
+                    <TextBlock Text="Destroyer" Name="P2Destroyer" Margin="0,0,10,0"/>
+                </StackPanel>
             </StackPanel>
             <StackPanel VerticalAlignment="Top" Orientation="Vertical" Margin="0 0 20 0">
                 <ListView x:Name="BoardList" Grid.Row="0" VerticalAlignment="Top" Height="440">
@@ -36,7 +50,5 @@
                 <Button x:Name="Shot" Style="{DynamicResource MenuButtonStyle}" Content="Shot" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" Cursor="Hand" Width="150"/>
             </StackPanel>
         </StackPanel>
-
-
     </StackPanel>
 </UserControl>

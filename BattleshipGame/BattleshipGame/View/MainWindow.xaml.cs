@@ -261,6 +261,7 @@ namespace BattleshipGame.View
             if (battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerOne)
             {
                 field[index].Fill = Brushes.DarkRed;
+                checkShipsSunk(battleshipGameAgainstComputer.PlayerTwoCurrentShips,Player1Board.P2ShipsSunk);
                 return "X";
             }
             else
@@ -279,6 +280,7 @@ namespace BattleshipGame.View
                 string hit = GameFieldComputerProcessOnePlayerMode(Player1ShipsField, tile);
 
                 battleshipGameAgainstComputer.MakeShot(battleshipGameAgainstComputer.PlayerTwo, pos);
+                checkShipsSunk(battleshipGameAgainstComputer.PlayerOneCurrentShips, Player1Board.P1ShipsSunk);
 
                 if (battleshipGameAgainstComputer.IsGameOver())
                 {
@@ -412,6 +414,8 @@ namespace BattleshipGame.View
                 if (battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerOne)
                 {
                     sinking = true;
+                    checkShipsSunk(battleshipGameWithTwoPlayers.PlayerTwoCurrentShips, Player1Board.P2ShipsSunk);
+                    checkShipsSunk(battleshipGameWithTwoPlayers.PlayerTwoCurrentShips, Player2Board.P1ShipsSunk);
                 }
             }
             else
@@ -419,6 +423,8 @@ namespace BattleshipGame.View
                 if (battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerTwo)
                 {
                     sinking = true;
+                    checkShipsSunk(battleshipGameWithTwoPlayers.PlayerOneCurrentShips, Player1Board.P1ShipsSunk);
+                    checkShipsSunk(battleshipGameWithTwoPlayers.PlayerOneCurrentShips, Player2Board.P2ShipsSunk);
                 }
             }
 
@@ -570,6 +576,26 @@ namespace BattleshipGame.View
                     Guess = guess,
                     Hit = hit
                 });
+            }
+        }
+
+        private void checkShipsSunk(List<Ship> ships, StackPanel shipsSunkPanel)
+        {
+            foreach (Ship ship in ships)
+            {
+                if (ship.Destroyed)
+                {
+                    foreach (TextBlock item in shipsSunkPanel.Children)
+                    {
+                        if (item.TextDecorations != TextDecorations.Strikethrough)
+                        {
+                            if (item.Text == ship.TypeOfShip.ToString())
+                            {
+                                item.TextDecorations = TextDecorations.Strikethrough;
+                            }
+                        }
+                    }
+                }
             }
         }
 
