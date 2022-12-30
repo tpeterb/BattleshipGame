@@ -20,7 +20,7 @@ namespace BattleshipGame.View
         public PlayerSwap(string playerName)
         {
             InitializeComponent();
-            string text = String.Format("It's {0}'s turn. Let's swap seats! Hit \"Ready\" when you are ready to move!", playerName);
+            string text = string.Format("It's {0}'s turn. Let's swap seats! Hit \"Ready\" when you are ready to move!", playerName);
             PlayerSwapTextBlock.Text = text;
         }
     }

@@ -1,9 +1,7 @@
-﻿using BattleshipGame.Repositories.Contexts;
-using BattleshipGame.Repositories.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using BattleshipGame.Repositories.Contexts;
+using BattleshipGame.Repositories.Models;
 
 namespace BattleshipGame.Repositories
 {
@@ -15,7 +13,7 @@ namespace BattleshipGame.Repositories
 
             using (database)
             {
-                return database.matchSaveAndReplays.ToList();
+                return database.MatchSaveAndReplays.ToList();
             }
         }
 
@@ -25,7 +23,7 @@ namespace BattleshipGame.Repositories
 
             using (database)
             {
-                return database.matchSaveAndReplays.Where(r => r.Id == id).FirstOrDefault();
+                return database.MatchSaveAndReplays.Where(r => r.Id == id).FirstOrDefault();
             }
         }
 
@@ -35,7 +33,7 @@ namespace BattleshipGame.Repositories
 
             using (database)
             {
-                database.matchSaveAndReplays.Add(match);
+                database.MatchSaveAndReplays.Add(match);
 
                 database.SaveChanges();
             }

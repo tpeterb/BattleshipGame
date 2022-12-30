@@ -1,12 +1,10 @@
-﻿using BattleshipGame.Model;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BattleshipGame.Repositories.Models
 {
     public class MatchScore
     {
-        [Key] 
+        [Key]
         public long Id { get; set; }
         [Required]
         public string PlayerName1 { get; set; }

@@ -1,16 +1,11 @@
-﻿using BattleshipGame.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using static System.Net.Mime.MediaTypeNames;
+using BattleshipGame.Model;
 
 namespace BattleshipGame.View
 {
@@ -19,25 +14,32 @@ namespace BattleshipGame.View
     /// </summary>
     public partial class AIShips : Window
     {
-        public List<Ship> _computerShips { get; }
-        public AIShips(List<Ship> computerShips)
+        private readonly ReadOnlyCollection<Ship> readOnlyComputerShips;
+        public AIShips(IEnumerable<Ship> computerShips)
         {
             InitializeComponent();
-            _computerShips = computerShips;
+            readOnlyComputerShips = new ReadOnlyCollection<Ship>((IList<Ship>)computerShips);
+            field.IsEnabled = false;
             DrawShips();
-            KeyUp += (s, e) => this.Close();
+            KeyUp += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    Close();
+                }
+            };
         }
 
         private void DrawShips()
         {
-            foreach (Ship ship in _computerShips)
+            foreach (Ship ship in readOnlyComputerShips)
             {
-                foreach (Position pos in ship.ShipPositions)
+                foreach (Position shipPosition in ship.ShipPositions)
                 {
                     for (int i = 0; i < field.grid.Children.Count; i++)
                     {
                         Rectangle tile = (Rectangle)field.grid.Children[i];
-                        if (Grid.GetRow(tile) == pos.Row && Grid.GetColumn(tile) == pos.Column)
+                        if (Grid.GetRow(tile) == shipPosition.Row && Grid.GetColumn(tile) == shipPosition.Column)
                         {
                             tile.Fill = Brushes.Black;
                             break;
@@ -46,7 +48,5 @@ namespace BattleshipGame.View
                 }
             }
         }
-
-
     }
 }

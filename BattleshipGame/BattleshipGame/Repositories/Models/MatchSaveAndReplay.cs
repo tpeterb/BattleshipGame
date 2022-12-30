@@ -1,7 +1,4 @@
-﻿using BattleshipGame.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BattleshipGame.Repositories.Models
 {
@@ -19,7 +16,7 @@ namespace BattleshipGame.Repositories.Models
         public string Player2Guesses { get; set; }
         public string Player1OriginalShips { get; set; }
         public string Player2OriginalShips { get; set; }
-        public string Player1CurrentShips{ get; set; }
+        public string Player1CurrentShips { get; set; }
         public string Player2CurrentShips { get; set; }
         public string Player1CurrentShipsType { get; set; }
         public string Player2CurrentShipsType { get; set; }

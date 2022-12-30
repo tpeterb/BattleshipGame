@@ -10,16 +10,16 @@ namespace BattleshipGame.View
     /// </summary>
     public partial class GameGridTable : UserControl
     {
-
         public bool IsTileSelectable { get; set; } = true;
-        public Rectangle selectedTile;
+        public Rectangle SelectedTile { get; set; }
 
         public GameGridTable()
         {
             InitializeComponent();
             Rectangle tile;
             for (int i = 0; i < 10; i++)
-                for(int j = 0; j < 10; j++)
+            {
+                for (int j = 0; j < 10; j++)
                 {
                     tile = new Rectangle();
                     Grid.SetRow(tile, i);
@@ -30,6 +30,7 @@ namespace BattleshipGame.View
                     tile.MouseLeftButtonDown += Tile_MouseLeft;
                     grid.Children.Add(tile);
                 }
+            }
         }
 
         public Rectangle this[int index]
@@ -40,22 +41,22 @@ namespace BattleshipGame.View
 
         private void Tile_MouseLeft(object sender, MouseEventArgs e)
         {
-            if(IsTileSelectable && (sender as Rectangle).Fill == Brushes.Transparent)
+            if (IsTileSelectable && (sender as Rectangle).Fill == Brushes.Transparent)
             {
-                if (selectedTile != null)
+                if (SelectedTile != null)
                 {
-                    selectedTile.Stroke = Brushes.Gray;
-                    selectedTile.StrokeThickness = 1;
+                    SelectedTile.Stroke = Brushes.Gray;
+                    SelectedTile.StrokeThickness = 1;
                 }
-                if (selectedTile != (Rectangle)sender)
+                if (SelectedTile != (Rectangle)sender)
                 {
-                    selectedTile = sender as Rectangle;
-                    selectedTile.Stroke = Brushes.Black;
-                    selectedTile.StrokeThickness = 2;
+                    SelectedTile = sender as Rectangle;
+                    SelectedTile.Stroke = Brushes.Black;
+                    SelectedTile.StrokeThickness = 2;
                 }
                 else
                 {
-                    selectedTile = null;
+                    SelectedTile = null;
                 }
             }
         }

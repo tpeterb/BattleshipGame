@@ -1,20 +1,13 @@
-﻿using BattleshipGame.Model;
-using BattleshipGame.Repositories.Models;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using BattleshipGame.Model;
+using BattleshipGame.Repositories.Models;
 
 namespace BattleshipGame.View
 {
@@ -23,21 +16,21 @@ namespace BattleshipGame.View
     /// </summary>
     public partial class ReplayGame : UserControl
     {
-        private readonly MatchSaveAndReplay match;
+        private readonly MatchSaveAndReplay _match;
         private List<Ship> PlayerOneOriginalShips { get; set; }
         private List<Ship> PlayerTwoOriginalShips { get; set; }
         private List<Position> PlayerOneGuesses { get; set; }
         private List<Position> PlayerTwoGuesses { get; set; }
 
-        private int currentNumberofTurns = 0, round = 0, maxNumberofTurns = 0;
-        private string playerToStart;
-        private string[] boardLabel = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+        private int _currentNumberofTurns = 0, _round = 0, _maxNumberofTurns = 0;
+        private string _playerToStart;
+        private readonly string[] _boardLabel = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
-        public ReplayGame(MatchSaveAndReplay _match)
+        public ReplayGame(MatchSaveAndReplay match)
         {
             InitializeComponent();
             DisableFieldClickable();
-            match = _match;
+            _match = match;
             ProcessData();
             Next.Click += NextMove;
             Previous.Click += PreviousMove;
@@ -52,14 +45,14 @@ namespace BattleshipGame.View
 
         private void ProcessData()
         {
-            P1Name.Content = match.PlayerName1;
-            P2Name.Content = match.PlayerName2;
-            maxNumberofTurns = match.NumberOfTurns;
-            playerToStart = match.PlayerToStart;
-            PlayerOneOriginalShips = OriginalShips(match.Player1OriginalShips);
-            PlayerTwoOriginalShips = OriginalShips(match.Player2OriginalShips);
-            PlayerOneGuesses = ProcessGuesses(match.Player1Guesses);
-            PlayerTwoGuesses = ProcessGuesses(match.Player2Guesses);
+            P1Name.Content = _match.PlayerName1;
+            P2Name.Content = _match.PlayerName2;
+            _maxNumberofTurns = _match.NumberOfTurns;
+            _playerToStart = _match.PlayerToStart;
+            PlayerOneOriginalShips = OriginalShips(_match.Player1OriginalShips);
+            PlayerTwoOriginalShips = OriginalShips(_match.Player2OriginalShips);
+            PlayerOneGuesses = ProcessGuesses(_match.Player1Guesses);
+            PlayerTwoGuesses = ProcessGuesses(_match.Player2Guesses);
             DrawOriginalShips(P2Field, PlayerOneOriginalShips);
             DrawOriginalShips(P1Field, PlayerTwoOriginalShips);
         }
@@ -71,20 +64,20 @@ namespace BattleshipGame.View
             foreach (var ship in ships)
             {
                 string[] shipData = ship.Split(",", 4);
-                string shipCoordinates = shipData[3].Substring(1, shipData[3].Length - 2);
+                string shipCoordinates = shipData[3][1..^1];
                 string[] coordinates = shipCoordinates.Split(",");
-                List<Position> shipPos = new List<Position>();
+                List<Position> shipCoordinatesList = new List<Position>();
                 foreach (var coordinate in coordinates)
                 {
-                    string removeArray = coordinate.Substring(1, coordinate.Length - 2);
+                    string removeArray = coordinate[1..^1];
                     string[] rowAndColumn = removeArray.Split("-");
-                    int row = Int32.Parse(rowAndColumn[0]);
-                    int column = Int32.Parse(rowAndColumn[1]);
-                    Position pos = new Position(row, column);
-                    shipPos.Add(pos);
+                    int row = int.Parse(rowAndColumn[0]);
+                    int column = int.Parse(rowAndColumn[1]);
+                    Position shipPosition = new Position(row, column);
+                    shipCoordinatesList.Add(shipPosition);
                 }
                 ShipType type = (ShipType)Enum.Parse(typeof(ShipType), shipData[0]);
-                Ship originalShip = new Ship(type, shipPos);
+                Ship originalShip = new Ship(type, shipCoordinatesList);
                 originalShips.Add(originalShip);
             }
             return originalShips;
@@ -94,12 +87,12 @@ namespace BattleshipGame.View
         {
             foreach (Ship ship in ships)
             {
-                foreach (Position pos in ship.ShipPositions)
+                foreach (Position shipPosition in ship.ShipPositions)
                 {
                     for (int i = 0; i < field.grid.Children.Count; i++)
                     {
                         Rectangle tile = (Rectangle)field.grid.Children[i];
-                        if (Grid.GetRow(tile) == pos.Row && Grid.GetColumn(tile) == pos.Column)
+                        if (Grid.GetRow(tile) == shipPosition.Row && Grid.GetColumn(tile) == shipPosition.Column)
                         {
                             tile.Fill = Brushes.Black;
                             break;
@@ -111,16 +104,16 @@ namespace BattleshipGame.View
 
         private List<Position> ProcessGuesses(string playerGuesses)
         {
-            string[] coords = playerGuesses.Split(";");
+            string[] coordinates = playerGuesses.Split(";");
             List<Position> positions = new List<Position>();
-            foreach (var coord in coords)
+            foreach (var coordinate in coordinates)
             {
-                string removeArray = coord.Substring(1, coord.Length - 2);
+                string removeArray = coordinate[1..^1];
                 string[] rowAndColumn = removeArray.Split("-");
-                int row = Int32.Parse(rowAndColumn[0]);
-                int column = Int32.Parse(rowAndColumn[1]);
-                Position pos = new Position(row, column);
-                positions.Add(pos);
+                int row = int.Parse(rowAndColumn[0]);
+                int column = int.Parse(rowAndColumn[1]);
+                Position shotPosition = new Position(row, column);
+                positions.Add(shotPosition);
             }
             return positions;
         }
@@ -129,96 +122,96 @@ namespace BattleshipGame.View
         {
             string[] array;
             string playerName;
-            if (playerToStart == match.PlayerName1)
+            if (_playerToStart == _match.PlayerName1)
             {
-                if (currentNumberofTurns < maxNumberofTurns)
+                if (_currentNumberofTurns < _maxNumberofTurns)
                 {
-                    if (currentNumberofTurns % 2 == 0)
+                    if (_currentNumberofTurns % 2 == 0)
                     {
-                        array = DrawNextShot(P1Field, PlayerOneGuesses, round);
-                        playerName = match.PlayerName1;
-                        round++;
+                        array = DrawNextShot(P1Field, PlayerOneGuesses, _round);
+                        playerName = _match.PlayerName1;
+                        _round++;
                     }
                     else
                     {
-                        array = DrawNextShot(P2Field, PlayerTwoGuesses, round - 1);
-                        playerName = match.PlayerName2;
+                        array = DrawNextShot(P2Field, PlayerTwoGuesses, _round - 1);
+                        playerName = _match.PlayerName2;
                     }
-                    BoardUpdate(currentNumberofTurns + 1, playerName, boardLabel[Int32.Parse(array[0])] + "-" + array[1], array[2]);
-                    currentNumberofTurns++;
+                    BoardUpdate(_currentNumberofTurns + 1, playerName, _boardLabel[int.Parse(array[0])] + "-" + array[1], array[2]);
+                    _currentNumberofTurns++;
                 }
             }
             else
             {
-                if (currentNumberofTurns < maxNumberofTurns)
+                if (_currentNumberofTurns < _maxNumberofTurns)
                 {
-                    if (currentNumberofTurns % 2 == 0)
+                    if (_currentNumberofTurns % 2 == 0)
                     {
-                        array = DrawNextShot(P2Field, PlayerTwoGuesses, round);
-                        playerName = match.PlayerName2;
-                        round++;
+                        array = DrawNextShot(P2Field, PlayerTwoGuesses, _round);
+                        playerName = _match.PlayerName2;
+                        _round++;
                     }
                     else
                     {
-                        array = DrawNextShot(P1Field, PlayerOneGuesses, round - 1);
-                        playerName = match.PlayerName1;
+                        array = DrawNextShot(P1Field, PlayerOneGuesses, _round - 1);
+                        playerName = _match.PlayerName1;
                     }
-                    BoardUpdate(currentNumberofTurns + 1, playerName, boardLabel[Int32.Parse(array[0])] + "-" + array[1], array[2]);
-                    currentNumberofTurns++;
+                    BoardUpdate(_currentNumberofTurns + 1, playerName, _boardLabel[int.Parse(array[0])] + "-" + array[1], array[2]);
+                    _currentNumberofTurns++;
                 }
             }
         }
 
         private void PreviousMove(object sender, RoutedEventArgs e)
         {
-            if (playerToStart == match.PlayerName1)
+            if (_playerToStart == _match.PlayerName1)
             {
-                if (currentNumberofTurns % 2 != 0)
+                if (_currentNumberofTurns % 2 != 0)
                 {
-                    if (round > 0)
+                    if (_round > 0)
                     {
-                        round--;
+                        _round--;
                     }
-                    DrawPrevious(P1Field, PlayerTwoOriginalShips, PlayerOneGuesses, round);
+                    DrawPrevious(P1Field, PlayerTwoOriginalShips, PlayerOneGuesses, _round);
                 }
                 else
                 {
-                    if (PlayerTwoGuesses.Count <= round)
+                    if (PlayerTwoGuesses.Count <= _round)
                     {
-                        DrawPrevious(P2Field, PlayerOneOriginalShips, PlayerTwoGuesses, round - 1);
+                        DrawPrevious(P2Field, PlayerOneOriginalShips, PlayerTwoGuesses, _round - 1);
                     }
                     else
                     {
-                        DrawPrevious(P2Field, PlayerOneOriginalShips, PlayerTwoGuesses, round);
+                        DrawPrevious(P2Field, PlayerOneOriginalShips, PlayerTwoGuesses, _round);
                     }
                 }
             }
             else
             {
-                if (currentNumberofTurns % 2 != 0)
+                if (_currentNumberofTurns % 2 != 0)
                 {
-                    if (round > 0)
+                    if (_round > 0)
                     {
-                        round--;
+                        _round--;
                     }
-                    DrawPrevious(P2Field, PlayerOneOriginalShips, PlayerTwoGuesses, round);
+                    DrawPrevious(P2Field, PlayerOneOriginalShips, PlayerTwoGuesses, _round);
                 }
                 else
                 {
-                    if (PlayerTwoGuesses.Count <= round)
+                    if (PlayerTwoGuesses.Count <= _round)
                     {
-                        DrawPrevious(P1Field, PlayerTwoOriginalShips, PlayerOneGuesses, round - 1);
+                        DrawPrevious(P1Field, PlayerTwoOriginalShips, PlayerOneGuesses, _round - 1);
                     }
                     else
                     {
-                        DrawPrevious(P1Field, PlayerTwoOriginalShips, PlayerOneGuesses, round);
+                        DrawPrevious(P1Field, PlayerTwoOriginalShips, PlayerOneGuesses, _round);
                     }
                 }
             }
 
-            if (currentNumberofTurns > 0)
+            if (_currentNumberofTurns > 0)
             {
-                currentNumberofTurns--;
+                _currentNumberofTurns--;
             }
             RemoveBoardLastItem();
         }
@@ -228,7 +221,7 @@ namespace BattleshipGame.View
             Debug.WriteLine(round);
             int row = positions[round].Row;
             int column = positions[round].Column;
-            string hit = "";
+            string hit = string.Empty;
             for (int i = 0; i < field.grid.Children.Count; i++)
             {
                 Rectangle tile = (Rectangle)field.grid.Children[i];
@@ -246,7 +239,6 @@ namespace BattleshipGame.View
                         hit = "-";
                         break;
                     }
-
                 }
             }
             string[] array = { row.ToString(), column.ToString(), hit };
@@ -260,9 +252,9 @@ namespace BattleshipGame.View
             bool hit = false;
             foreach (Ship ship in ships)
             {
-                foreach (var pos in ship.ShipPositions)
+                foreach (var shotPosition in ship.ShipPositions)
                 {
-                    if (pos.Row == row && pos.Column == column)
+                    if (shotPosition.Row == row && shotPosition.Column == column)
                     {
                         hit = true;
                     }
@@ -301,7 +293,9 @@ namespace BattleshipGame.View
         private void RemoveBoardLastItem()
         {
             if (BoardList.Items.Count > 0)
+            {
                 BoardList.Items.RemoveAt(BoardList.Items.Count - 1);
+            }
         }
 
         private class MyItem
@@ -330,6 +324,5 @@ namespace BattleshipGame.View
         {
             Keyboard.Focus(Next);
         }
-
     }
 }

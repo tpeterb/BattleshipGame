@@ -1,17 +1,11 @@
-﻿using BattleshipGame.Model;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BattleshipGame.Model;
 
 namespace BattleshipGame.View
 {
@@ -20,12 +14,12 @@ namespace BattleshipGame.View
     /// </summary>
     public partial class ShipPlacement : UserControl
     {
-        private Rectangle selectedTile;
-        private TextBlock selectedShip;
-        private ShipType selectedShipType;
-        private int selectedShipSize;
-        private ShipOrientation shipOrientation = ShipOrientation.Horizontal;
-        private List<Ship> _ships;
+        private Rectangle _selectedTile;
+        private TextBlock _selectedShip;
+        private ShipType _selectedShipType;
+        private int _selectedShipSize;
+        private ShipOrientation _shipOrientation = ShipOrientation.Horizontal;
+        private readonly List<Ship> _ships;
 
         public ShipPlacement(List<Ship> ships)
         {
@@ -35,124 +29,136 @@ namespace BattleshipGame.View
             {
                 tile.Fill = Brushes.LightSkyBlue;
                 tile.MouseLeftButtonDown += Tile_MouseLeftButtonDown;
-                tile.MouseMove += cellMouseMove;
-                tile.MouseLeave += cellMouseLeave;
+                tile.MouseMove += CellMouseMove;
+                tile.MouseLeave += CellMouseLeave;
             }
         }
 
         private void ShipText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(selectedShip != null)
-                selectedShip.Background = Brushes.LightSkyBlue;
+            if (_selectedShip != null)
+            {
+                _selectedShip.Background = Brushes.Transparent;
+            }
 
-            selectedShip = sender as TextBlock;
-            selectedShip.Background = Brushes.Green;
+            _selectedShip = sender as TextBlock;
+            _selectedShip.Background = Brushes.Green;
 
-            if (selectedShip.Text == "AircraftCarrier")
+            if (_selectedShip.Text == "AircraftCarrier")
             {
-                selectedShipType = ShipType.AircraftCarrier;
-                selectedShipSize = 5;
-            }else if (selectedShip.Text == "Battleship")
-            {
-                selectedShipType = ShipType.Battleship;
-                selectedShipSize = 4;
+                _selectedShipType = ShipType.AircraftCarrier;
+                _selectedShipSize = 5;
             }
-            else if (selectedShip.Text == "Cruiser")
+            else if (_selectedShip.Text == "Battleship")
             {
-                selectedShipType = ShipType.Cruiser;
-                selectedShipSize = 3;
+                _selectedShipType = ShipType.Battleship;
+                _selectedShipSize = 4;
             }
-            else if (selectedShip.Text == "Submarine")
+            else if (_selectedShip.Text == "Cruiser")
             {
-                selectedShipType = ShipType.Submarine;
-                selectedShipSize = 3;
+                _selectedShipType = ShipType.Cruiser;
+                _selectedShipSize = 3;
             }
-            else if (selectedShip.Text == "Destroyer")
+            else if (_selectedShip.Text == "Submarine")
             {
-                selectedShipType = ShipType.Destroyer;
-                selectedShipSize = 2;
+                _selectedShipType = ShipType.Submarine;
+                _selectedShipSize = 3;
+            }
+            else if (_selectedShip.Text == "Destroyer")
+            {
+                _selectedShipType = ShipType.Destroyer;
+                _selectedShipSize = 2;
             }
         }
 
         private void Tile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(selectedShip != null && selectedTile != null && selectedTile.Fill != Brushes.Black)
+            if (_selectedShip != null && _selectedTile != null && _selectedTile.Fill != Brushes.Black)
             {
-                int index = field.grid.Children.IndexOf(selectedTile);
-                int row = Grid.GetRow(field.grid.Children[index]);
-                int column = Grid.GetColumn(field.grid.Children[index]);
-
-                List<Position> shipPositions = new List<Position>();
-                for(int i = 0; i <= selectedShipSize-1; i++)
+                int index = field.grid.Children.IndexOf(_selectedTile);
+                if (TileAvailable(index))
                 {
-                    Position pos;
-                    if (shipOrientation == ShipOrientation.Horizontal)
+                    int row = Grid.GetRow(field.grid.Children[index]);
+                    int column = Grid.GetColumn(field.grid.Children[index]);
+
+                    List<Position> shipPositions = new List<Position>();
+                    for (int i = 0; i <= _selectedShipSize - 1; i++)
                     {
-                        if (column + i < 10)
+                        Position shipCoordinate;
+                        if (_shipOrientation == ShipOrientation.Horizontal)
                         {
-                            pos = new Position(row, column + i);
-                            shipPositions.Add(pos);
+                            if (column + i < 10)
+                            {
+                                shipCoordinate = new Position(row, column + i);
+                                shipPositions.Add(shipCoordinate);
+                            }
+                        }
+                        else
+                        {
+                            if (row + i < 10)
+                            {
+                                shipCoordinate = new Position(row + i, column);
+                                shipPositions.Add(shipCoordinate);
+                            }
                         }
                     }
-                    else
+                    if (shipPositions.Count == _selectedShipSize)
                     {
-                        if(row + i < 10)
+                        Ship ship = new Ship(_selectedShipType, shipPositions);
+                        _ships.Add(ship);
+
+                        if (_ships.Count == 5)
                         {
-                            pos = new Position(row + i, column);
-                            shipPositions.Add(pos);
+                            Rotate.Visibility = Visibility.Hidden;
+                            Confirm.Visibility = Visibility.Visible;
                         }
+
+                        HelperPlaceShip(index, Brushes.Black);
+                        _selectedShip.Visibility = Visibility.Hidden;
+                        _selectedTile = null;
+                        _selectedShip = null;
+                        _selectedShipSize = -1;
                     }
-
-                }
-                if (shipPositions.Count == selectedShipSize)
-                {
-                    Ship ship = new Ship(selectedShipType, shipPositions);
-                    _ships.Add(ship);
-
-                    if (_ships.Count == 5)
-                    {
-                        Rotate.Visibility = Visibility.Hidden;
-                        Confirm.Visibility = Visibility.Visible;
-                    }
-
-                    HelperPlaceShip(index, Brushes.Black);
-                    selectedShip.Visibility = Visibility.Hidden;
-                    selectedTile = null;
-                    selectedShip = null;
-                    selectedShipSize = -1;
                 }
             }
         }
 
         private void ShipOrientationRotate(object sender, RoutedEventArgs e)
         {
-            if(shipOrientation == ShipOrientation.Horizontal)
-                shipOrientation = ShipOrientation.Vertical;
+            if (_shipOrientation == ShipOrientation.Horizontal)
+            {
+                _shipOrientation = ShipOrientation.Vertical;
+            }
             else
-                shipOrientation = ShipOrientation.Horizontal;
+            {
+                _shipOrientation = ShipOrientation.Horizontal;
+            }
         }
-
 
         private bool TileAvailable(int index)
         {
             try
             {
-                if(shipOrientation == ShipOrientation.Horizontal)
+                if (_shipOrientation == ShipOrientation.Horizontal)
                 {
-                    for (int i = 0; i < selectedShipSize; i++)
+                    for (int i = 0; i < _selectedShipSize; i++)
                     {
                         Rectangle tile = (Rectangle)field.grid.Children[index + i];
                         if (tile.Fill == Brushes.Black)
+                        {
                             return false;
+                        }
                     }
                 }
                 else
                 {
-                    for (int j = 0; j < selectedShipSize * 10; j += 10)
+                    for (int j = 0; j < _selectedShipSize * 10; j += 10)
                     {
                         Rectangle tile = (Rectangle)field.grid.Children[index + j];
                         if (tile.Fill == Brushes.Black)
+                        {
                             return false;
+                        }
                     }
                 }
                 return true;
@@ -163,31 +169,31 @@ namespace BattleshipGame.View
             }
         }
 
-        private void cellMouseMove(object sender, MouseEventArgs e)
+        private void CellMouseMove(object sender, MouseEventArgs e)
         {
-            if(selectedShip != null)
+            if (_selectedShip != null)
             {
-                selectedTile = sender as Rectangle;
-                HelperPlaceShip(field.grid.Children.IndexOf(selectedTile), Brushes.Green);
+                _selectedTile = sender as Rectangle;
+                HelperPlaceShip(field.grid.Children.IndexOf(_selectedTile), Brushes.Green);
             }
         }
 
-        private void cellMouseLeave(object sender, MouseEventArgs e)
+        private void CellMouseLeave(object sender, MouseEventArgs e)
         {
-            if(selectedTile != null)
+            if (_selectedTile != null)
             {
-                selectedTile = sender as Rectangle;
-                HelperPlaceShip(field.grid.Children.IndexOf(selectedTile), Brushes.LightSkyBlue);
+                _selectedTile = sender as Rectangle;
+                HelperPlaceShip(field.grid.Children.IndexOf(_selectedTile), Brushes.LightSkyBlue);
             }
         }
 
         private void HelperPlaceShip(int index, Brush colorName)
         {
-            if(shipOrientation == ShipOrientation.Horizontal)
+            if (_shipOrientation == ShipOrientation.Horizontal)
             {
-                if (TileAvailable(index) && (index % 10) + selectedShipSize <= 10)
+                if (TileAvailable(index) && (index % 10) + _selectedShipSize <= 10)
                 {
-                    for (int i = 0; i < selectedShipSize; i++)
+                    for (int i = 0; i < _selectedShipSize; i++)
                     {
                         Rectangle tile = (Rectangle)field.grid.Children[index + i];
                         tile.Fill = colorName;
@@ -196,16 +202,15 @@ namespace BattleshipGame.View
             }
             else
             {
-                if(TileAvailable(index) && index + (selectedShipSize*10) <= 109)
+                if (TileAvailable(index) && index + (_selectedShipSize * 10) <= 109)
                 {
-                    for(int j = 0; j < selectedShipSize * 10; j += 10)
+                    for (int j = 0; j < _selectedShipSize * 10; j += 10)
                     {
                         Rectangle tile = (Rectangle)field.grid.Children[index + j];
                         tile.Fill = colorName;
                     }
                 }
             }
-
         }
     }
 }

@@ -1,28 +1,17 @@
 ﻿// Sytem imports
+// Declared class imports
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-
-// Declared class imports
 using BattleshipGame.Model;
 using BattleshipGame.Repositories;
 using BattleshipGame.Repositories.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Key = System.Windows.Input.Key;
 
 namespace BattleshipGame.View
@@ -30,22 +19,21 @@ namespace BattleshipGame.View
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    /// 
     public partial class MainWindow : Window
     {
-        private Player Player1Name;
-        private Player Player2Name;
-        private ShipPlacement Player1ShipPlacement;
-        private ShipPlacement Player2ShipPlacement;
-        private List<Ship> Player1Ships;
-        private List<Ship> Player2Ships;
-        private Game Player1Board;
-        private Game Player2Board;
-        private BattleshipGameAgainstComputer battleshipGameAgainstComputer;
-        private BattleshipGameWithTwoPlayers battleshipGameWithTwoPlayers;
-        private Boolean Player1Ready = false;
-        private Boolean Player2Ready = false;
-        private string[] boardLabel = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+        private Player _playerOne;
+        private Player _playerTwo;
+        private ShipPlacement _player1ShipPlacement;
+        private ShipPlacement _player2ShipPlacement;
+        private List<Ship> _player1Ships;
+        private List<Ship> _player2Ships;
+        private Game _player1Board;
+        private Game _player2Board;
+        private BattleshipGameAgainstComputer _battleshipGameAgainstComputer;
+        private BattleshipGameWithTwoPlayers _battleshipGameWithTwoPlayers;
+        private bool _player1Ready = false;
+        private bool _player2Ready = false;
+        private readonly string[] _boardLabel = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
         public MainWindow()
         {
@@ -58,35 +46,35 @@ namespace BattleshipGame.View
         private void MainMenu()
         {
             MainMenu mainMenu = new MainMenu();
-            mainMenu.NewGame.Click += onClickNewGame;
-            mainMenu.Scoreboard.Click += onClickScoreBoard;
-            mainMenu.Quit.Click += onClickQuit;
+            mainMenu.NewGame.Click += OnClickNewGame;
+            mainMenu.Scoreboard.Click += OnClickScoreBoard;
+            mainMenu.Quit.Click += OnClickQuit;
             currentScreen.Content = mainMenu;
         }
 
-        private void onClickNewGame(object sender, RoutedEventArgs e)
+        private void OnClickNewGame(object sender, RoutedEventArgs e)
         {
             NewGame newGame = new NewGame();
-            newGame.OnePlayerModeButton.Click += (sender, EventArgs) => onClickOnePlayerMode(sender, EventArgs, newGame);
-            newGame.TwoPlayerModeButton.Click += (sender, EventArgs) => onClickTwoPlayerMode(sender, EventArgs, newGame);
-            newGame.Back.Click += onClickBack;
+            newGame.OnePlayerModeButton.Click += (sender, eventArgs) => OnClickOnePlayerMode(sender, eventArgs, newGame);
+            newGame.TwoPlayerModeButton.Click += (sender, eventArgs) => OnClickTwoPlayerMode(sender, eventArgs, newGame);
+            newGame.Back.Click += OnClickBack;
             currentScreen.Content = newGame;
         }
 
-        private void onClickScoreBoard(object sender, RoutedEventArgs e)
+        private void OnClickScoreBoard(object sender, RoutedEventArgs e)
         {
             ScoreBoard scoreBoard = new ScoreBoard();
-            scoreBoard.Back.Click += onClickBack;
-            scoreBoard.Replay.Click += (sender, EventArgs) => onClickReplay(sender, EventArgs, scoreBoard);
+            scoreBoard.Back.Click += OnClickBack;
+            scoreBoard.Replay.Click += (sender, eventArgs) => OnClickReplay(sender, eventArgs, scoreBoard);
             currentScreen.Content = scoreBoard;
             var matchScores = MatchScoreRepository.GetMatchScores();
-            foreach(var match in matchScores)
+            foreach (var match in matchScores)
             {
                 scoreBoard.ScoreBoardListView.Items.Add(match);
             }
         }
 
-        private void onClickQuit(object sender, RoutedEventArgs e)
+        private void OnClickQuit(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
@@ -95,7 +83,7 @@ namespace BattleshipGame.View
 
         #region NewGame
 
-        private void onClickOnePlayerMode(object sender, RoutedEventArgs e, NewGame newGame)
+        private void OnClickOnePlayerMode(object sender, RoutedEventArgs e, NewGame newGame)
         {
             newGame.OnePlayerModeButton.Visibility = Visibility.Hidden;
             newGame.TwoPlayerModeButton.Visibility = Visibility.Hidden;
@@ -104,10 +92,10 @@ namespace BattleshipGame.View
             newGame.Player1TextBox.Visibility = Visibility.Visible;
             newGame.StartGameButton.Visibility = Visibility.Visible;
 
-            newGame.StartGameButton.Click += (sender, EventArgs) => InitializeOnePlayerGame(sender, EventArgs, newGame);
+            newGame.StartGameButton.Click += (sender, eventArgs) => InitializeOnePlayerGame(sender, eventArgs, newGame);
         }
 
-        private void onClickTwoPlayerMode(object sender, RoutedEventArgs e, NewGame newGame)
+        private void OnClickTwoPlayerMode(object sender, RoutedEventArgs e, NewGame newGame)
         {
             newGame.OnePlayerModeButton.Visibility = Visibility.Hidden;
             newGame.TwoPlayerModeButton.Visibility = Visibility.Hidden;
@@ -119,7 +107,7 @@ namespace BattleshipGame.View
 
             newGame.StartGameButton.Visibility = Visibility.Visible;
 
-            newGame.StartGameButton.Click += (sender, EventArgs) => InitializeTwoPlayerGame(sender, EventArgs, newGame);
+            newGame.StartGameButton.Click += (sender, eventArgs) => InitializeTwoPlayerGame(sender, eventArgs, newGame);
         }
 
         private void InitializeOnePlayerGame(object sender, RoutedEventArgs e, NewGame newGame)
@@ -127,15 +115,15 @@ namespace BattleshipGame.View
             string playerName = newGame.Player1TextBox.Text;
             try
             {
-                Player1Name = new Player(PlayerType.Human, playerName);
-                Player1Ships = new List<Ship>();
-                Player1ShipPlacement = new ShipPlacement(Player1Ships);
-                Player1Board = new Game();
-                Player1Board.KeyUp += ShowAIShips;
-                Player1Board.playerNameTextBlock.Text = Player1Name.PlayerName;
-                currentScreen.Content = Player1ShipPlacement;
-                Player1ShipPlacement.Confirm.Click += onClickShipPlacementAI;
-                Player1Board.Shot.Click += onClickShot;
+                _playerOne = new Player(PlayerType.Human, playerName);
+                _player1Ships = new List<Ship>();
+                _player1ShipPlacement = new ShipPlacement(_player1Ships);
+                _player1Board = new Game();
+                _player1Board.KeyUp += ShowAIShips;
+                _player1Board.playerNameTextBlock.Text = _playerOne.PlayerName;
+                currentScreen.Content = _player1ShipPlacement;
+                _player1ShipPlacement.Confirm.Click += OnClickShipPlacementAI;
+                _player1Board.Shot.Click += OnClickShot;
             }
             catch (Exception ex)
             {
@@ -143,33 +131,32 @@ namespace BattleshipGame.View
             }
         }
 
-
         private void InitializeTwoPlayerGame(object sender, RoutedEventArgs e, NewGame newGame)
         {
             string player1Name = newGame.Player1TextBox.Text;
             string player2Name = newGame.Player2TextBox.Text;
             try
             {
-                Player1Name = new Player(PlayerType.Human, player1Name);
-                Player2Name = new Player(PlayerType.Human, player2Name);
+                _playerOne = new Player(PlayerType.Human, player1Name);
+                _playerTwo = new Player(PlayerType.Human, player2Name);
 
-                if (Player1Name != null && Player2Name != null)
+                if (_playerOne != null && _playerTwo != null)
                 {
-                    Player1Ships = new List<Ship>();
-                    Player1ShipPlacement = new ShipPlacement(Player1Ships);
-                    Player1Board = new Game();
-                    Player1Board.playerNameTextBlock.Text = Player1Name.PlayerName;
-                    Player1ShipPlacement.Confirm.Click += onClickShipPlacementTwoPlayer;
-                    Player1Board.Shot.Click += onClickShot;
+                    _player1Ships = new List<Ship>();
+                    _player1ShipPlacement = new ShipPlacement(_player1Ships);
+                    _player1Board = new Game();
+                    _player1Board.playerNameTextBlock.Text = _playerOne.PlayerName;
+                    _player1ShipPlacement.Confirm.Click += OnClickShipPlacementTwoPlayer;
+                    _player1Board.Shot.Click += OnClickShot;
 
-                    Player2Ships = new List<Ship>();
-                    Player2ShipPlacement = new ShipPlacement(Player2Ships);
-                    Player2Board = new Game();
-                    Player2Board.playerNameTextBlock.Text = Player2Name.PlayerName;
-                    Player2ShipPlacement.Confirm.Click += onClickShipPlacementTwoPlayer;
-                    Player2Board.Shot.Click += onClickShot;
+                    _player2Ships = new List<Ship>();
+                    _player2ShipPlacement = new ShipPlacement(_player2Ships);
+                    _player2Board = new Game();
+                    _player2Board.playerNameTextBlock.Text = _playerTwo.PlayerName;
+                    _player2ShipPlacement.Confirm.Click += OnClickShipPlacementTwoPlayer;
+                    _player2Board.Shot.Click += OnClickShot;
 
-                    playerSwapConfig(player1Name, PlayerSwapToShipPlacement);
+                    PlayerSwapScene(player1Name, PlayerSwapToShipPlacement);
                 }
             }
             catch (Exception ex)
@@ -188,40 +175,40 @@ namespace BattleshipGame.View
             {
                 if (!Application.Current.Windows.OfType<AIShips>().Any())
                 {
-                    AIShips AIShipsWindow = new AIShips(battleshipGameAgainstComputer.PlayerTwoOriginalShips);
-                    AIShipsWindow.Show();
+                    AIShips aiShipsWindow = new AIShips(_battleshipGameAgainstComputer.PlayerTwoOriginalShips);
+                    aiShipsWindow.Show();
                 }
             }
         }
 
-        private void onClickShipPlacementAI(object sender, RoutedEventArgs e)
+        private void OnClickShipPlacementAI(object sender, RoutedEventArgs e)
         {
-            if (PlaceShips(Player1ShipPlacement, Player1Board))
+            if (PlaceShips(_player1ShipPlacement, _player1Board))
             {
-                battleshipGameAgainstComputer = new BattleshipGameAgainstComputer(Player1Name, Player1Ships);
-                if (battleshipGameAgainstComputer.PlayerNameToMove != Player1Name.PlayerName)
+                _battleshipGameAgainstComputer = new BattleshipGameAgainstComputer(_playerOne, _player1Ships);
+                if (_battleshipGameAgainstComputer.PlayerNameToMove != _playerOne.PlayerName)
                 {
-                    ComputerShot(battleshipGameAgainstComputer.CreateComputerShot());
+                    ComputerShot(_battleshipGameAgainstComputer.CreateComputerShot());
                 }
-                currentScreen.Content = Player1Board;
+                currentScreen.Content = _player1Board;
             }
         }
 
-        private void onClickShipPlacementTwoPlayer(object sender, RoutedEventArgs e)
+        private void OnClickShipPlacementTwoPlayer(object sender, RoutedEventArgs e)
         {
-            if (Player1Ready != true)
+            if (_player1Ready != true)
             {
-                if (PlaceShips(Player1ShipPlacement, Player1Board))
+                if (PlaceShips(_player1ShipPlacement, _player1Board))
                 {
-                    Player1Ready = true;
+                    _player1Ready = true;
                     PlayerSwapToShipPlacement(sender, e);
                 }
             }
-            else if (Player2Ready != true)
+            else if (_player2Ready != true)
             {
-                if (PlaceShips(Player2ShipPlacement, Player2Board))
+                if (PlaceShips(_player2ShipPlacement, _player2Board))
                 {
-                    Player2Ready = true;
+                    _player2Ready = true;
                     PlayerSwapToShipPlacement(sender, e);
                 }
             }
@@ -229,14 +216,14 @@ namespace BattleshipGame.View
 
         private void AgainstComputer()
         {
-            GameGridTable p1EnemyField = Player1Board.enemyTable;
-            if (p1EnemyField.selectedTile != null)
+            GameGridTable p1EnemyField = _player1Board.enemyTable;
+            if (p1EnemyField.SelectedTile != null)
             {
                 string hit = GameFieldProcessOnePlayerMode(p1EnemyField);
-                int[] fieldRowAndColumn = getTileRowAndColumn(p1EnemyField);
-                BoardUpdate(Player1Name.PlayerName, boardLabel[fieldRowAndColumn[0]] + "-" + (fieldRowAndColumn[1] + 1), hit);
+                int[] fieldRowAndColumn = GetTileRowAndColumn(p1EnemyField);
+                BoardUpdate(_playerOne.PlayerName, _boardLabel[fieldRowAndColumn[0]] + "-" + (fieldRowAndColumn[1] + 1), hit);
 
-                if (battleshipGameAgainstComputer.IsGameOver())
+                if (_battleshipGameAgainstComputer.IsGameOver())
                 {
                     MessageBox.Show("You won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                     SaveComputerGame();
@@ -244,7 +231,7 @@ namespace BattleshipGame.View
                 }
                 else
                 {
-                    ComputerShot(battleshipGameAgainstComputer.CreateComputerShot());
+                    ComputerShot(_battleshipGameAgainstComputer.CreateComputerShot());
                 }
                 DefaultSelectedTile(p1EnemyField);
             }
@@ -252,16 +239,16 @@ namespace BattleshipGame.View
 
         private string GameFieldProcessOnePlayerMode(GameGridTable field)
         {
-            int index = field.grid.Children.IndexOf(field.selectedTile);
-            int[] tileRowAndColumn = getTileRowAndColumn(field);
+            int index = field.grid.Children.IndexOf(field.SelectedTile);
+            int[] tileRowAndColumn = GetTileRowAndColumn(field);
             int row = tileRowAndColumn[0];
             int column = tileRowAndColumn[1];
-            Position pos = new Position(row, column);
-            battleshipGameAgainstComputer.MakeShot(Player1Name, pos);
-            if (battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerOne)
+            Position shotPosition = new Position(row, column);
+            _battleshipGameAgainstComputer.MakeShot(_playerOne, shotPosition);
+            if (_battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerOne)
             {
                 field[index].Fill = Brushes.DarkRed;
-                checkShipsSunk(battleshipGameAgainstComputer.PlayerTwoCurrentShips,Player1Board.P2ShipsSunk);
+                CheckShipsSunk(_battleshipGameAgainstComputer.PlayerTwoCurrentShips, _player1Board.P2ShipsSunk);
                 return "X";
             }
             else
@@ -271,41 +258,39 @@ namespace BattleshipGame.View
             }
         }
 
-        private void ComputerShot(Position pos)
+        private void ComputerShot(Position shotPosition)
         {
-            GameGridTable Player1ShipsField = Player1Board.yourTable;
-            var tile = Player1ShipsField.grid.Children.Cast<Rectangle>().Where(child => Grid.GetRow(child) == pos.Row && Grid.GetColumn(child) == pos.Column).First();
+            GameGridTable player1ShipsField = _player1Board.yourTable;
+            var tile = player1ShipsField.grid.Children.Cast<Rectangle>().Where(child => Grid.GetRow(child) == shotPosition.Row && Grid.GetColumn(child) == shotPosition.Column).First();
             if (tile != null)
             {
-                string hit = GameFieldComputerProcessOnePlayerMode(Player1ShipsField, tile);
+                string hit = GameFieldComputerProcessOnePlayerMode(player1ShipsField, tile);
 
-                battleshipGameAgainstComputer.MakeShot(battleshipGameAgainstComputer.PlayerTwo, pos);
-                checkShipsSunk(battleshipGameAgainstComputer.PlayerOneCurrentShips, Player1Board.P1ShipsSunk);
+                _battleshipGameAgainstComputer.MakeShot(_battleshipGameAgainstComputer.PlayerTwo, shotPosition);
+                CheckShipsSunk(_battleshipGameAgainstComputer.PlayerOneCurrentShips, _player1Board.P1ShipsSunk);
 
-                if (battleshipGameAgainstComputer.IsGameOver())
+                if (_battleshipGameAgainstComputer.IsGameOver())
                 {
                     MessageBox.Show("You lose!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                     SaveComputerGame();
-                    Player1Board.Shot.Click -= onClickShot;
+                    _player1Board.Shot.Click -= OnClickShot;
                     MainMenu();
                 }
 
-                BoardUpdate("Computer", boardLabel[pos.Column] + "-" + (pos.Row + 1), hit);
-
+                BoardUpdate("Computer", _boardLabel[shotPosition.Column] + "-" + (shotPosition.Row + 1), hit);
             }
         }
 
         private void SaveComputerGame()
         {
             SaveMatchScore(
-                Player1Name,
-                battleshipGameAgainstComputer.PlayerTwo,
-                battleshipGameAgainstComputer.PlayerOneHits.ToString(),
-                battleshipGameAgainstComputer.PlayerTwoHits.ToString(),
-                battleshipGameAgainstComputer.NumberOfTurns,
-                battleshipGameAgainstComputer.WinnerPlayerName
-                );
-            SaveAllMatchDataAgainstComputer(battleshipGameAgainstComputer);
+                _playerOne,
+                _battleshipGameAgainstComputer.PlayerTwo,
+                _battleshipGameAgainstComputer.PlayerOneHits.ToString(),
+                _battleshipGameAgainstComputer.PlayerTwoHits.ToString(),
+                _battleshipGameAgainstComputer.NumberOfTurns,
+                _battleshipGameAgainstComputer.WinnerPlayerName);
+            SaveAllMatchDataAgainstComputer(_battleshipGameAgainstComputer);
         }
 
         private string GameFieldComputerProcessOnePlayerMode(GameGridTable field, Rectangle tile)
@@ -318,7 +303,7 @@ namespace BattleshipGame.View
             }
             else
             {
-                battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerTwo = false;
+                _battleshipGameAgainstComputer.SinkingAtPreviousHitOfPlayerTwo = false;
                 field[index].Fill = Brushes.DarkBlue;
                 return "-";
             }
@@ -330,101 +315,105 @@ namespace BattleshipGame.View
 
         private void PlayerSwapToShipPlacement(object sender, RoutedEventArgs e)
         {
-            if (Player1Ready != true) {
-                currentScreen.Content = Player1ShipPlacement;
+            if (_player1Ready != true)
+            {
+                currentScreen.Content = _player1ShipPlacement;
             }
-            else if (Player2Ready != true) {
-                playerSwapConfig(Player2Name.PlayerName, SwapContentP2);
+            else if (_player2Ready != true)
+            {
+                PlayerSwapScene(_playerTwo.PlayerName, SwapContentP2);
             }
-            else {
-                battleshipGameWithTwoPlayers = new BattleshipGameWithTwoPlayers(Player1Name, Player2Name, Player1Ships, Player2Ships);
-                playerSwapConfig(battleshipGameWithTwoPlayers.PlayerNameToMove, PlayerSwapToBoard);
-                if (Player1Name.PlayerName != battleshipGameWithTwoPlayers.PlayerNameToMove)
-                    Player1Ready = false;
+            else
+            {
+                _battleshipGameWithTwoPlayers = new BattleshipGameWithTwoPlayers(_playerOne, _playerTwo, _player1Ships, _player2Ships);
+                PlayerSwapScene(_battleshipGameWithTwoPlayers.PlayerNameToMove, PlayerSwapToBoard);
+                if (_playerOne.PlayerName != _battleshipGameWithTwoPlayers.PlayerNameToMove)
+                {
+                    _player1Ready = false;
+                }
             }
         }
 
         private void AgainstTwoPlayer()
         {
-            if (Player1Ready)
+            if (_player1Ready)
             {
-                GameGridTable p2Field = Player2Board.yourTable;
-                GameGridTable p1EnemyField = Player1Board.enemyTable;
+                GameGridTable p2Field = _player2Board.yourTable;
+                GameGridTable p1EnemyField = _player1Board.enemyTable;
 
-                if (p1EnemyField.selectedTile != null)
+                if (p1EnemyField.SelectedTile != null)
                 {
-                    string hit = GameFieldProcessTwoPlayerMode(Player1Name, p2Field, p1EnemyField);
-                    int[] tileRowAndColumn = getTileRowAndColumn(p1EnemyField);
+                    string hit = GameFieldProcessTwoPlayerMode(_playerOne, p2Field, p1EnemyField);
+                    int[] tileRowAndColumn = GetTileRowAndColumn(p1EnemyField);
                     int row = tileRowAndColumn[0];
                     int column = tileRowAndColumn[1];
-                    BoardUpdate(Player1Name.PlayerName, boardLabel[column] + "-" + (row + 1), hit);
+                    BoardUpdate(_playerOne.PlayerName, _boardLabel[column] + "-" + (row + 1), hit);
                     DefaultSelectedTile(p1EnemyField);
                 }
             }
             else
             {
-                GameGridTable p2EnemyField = Player2Board.enemyTable;
-                GameGridTable p1Field = Player1Board.yourTable;
+                GameGridTable p2EnemyField = _player2Board.enemyTable;
+                GameGridTable p1Field = _player1Board.yourTable;
 
-                if (p2EnemyField.selectedTile != null)
+                if (p2EnemyField.SelectedTile != null)
                 {
-                    string hit = GameFieldProcessTwoPlayerMode(Player2Name, p1Field, p2EnemyField);
-                    int[] tileRowAndColumn = getTileRowAndColumn(p2EnemyField);
+                    string hit = GameFieldProcessTwoPlayerMode(_playerTwo, p1Field, p2EnemyField);
+                    int[] tileRowAndColumn = GetTileRowAndColumn(p2EnemyField);
                     int row = tileRowAndColumn[0];
                     int column = tileRowAndColumn[1];
-                    BoardUpdate(Player2Name.PlayerName, boardLabel[column] + "-" + (row + 1), hit);
+                    BoardUpdate(_playerTwo.PlayerName, _boardLabel[column] + "-" + (row + 1), hit);
                     DefaultSelectedTile(p2EnemyField);
                 }
             }
 
-            if (battleshipGameWithTwoPlayers.IsGameOver())
+            if (_battleshipGameWithTwoPlayers.IsGameOver())
             {
                 SaveMatchScore(
-                    Player1Name,
-                    Player2Name,
-                    battleshipGameWithTwoPlayers.PlayerOneHits.ToString(),
-                    battleshipGameWithTwoPlayers.PlayerTwoHits.ToString(),
-                    battleshipGameWithTwoPlayers.NumberOfTurns,
-                    battleshipGameWithTwoPlayers.WinnerPlayerName
-                    );
-                SaveAllMatchDataTwoPlayer(battleshipGameWithTwoPlayers);
+                    _playerOne,
+                    _playerTwo,
+                    _battleshipGameWithTwoPlayers.PlayerOneHits.ToString(),
+                    _battleshipGameWithTwoPlayers.PlayerTwoHits.ToString(),
+                    _battleshipGameWithTwoPlayers.NumberOfTurns,
+                    _battleshipGameWithTwoPlayers.WinnerPlayerName);
+                SaveAllMatchDataTwoPlayer(_battleshipGameWithTwoPlayers);
 
-                MessageBox.Show(battleshipGameWithTwoPlayers.WinnerPlayerName + " won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(_battleshipGameWithTwoPlayers.WinnerPlayerName + " won!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 MainMenu();
             }
             else
             {
                 PlayerReady();
-                playerSwapConfig(battleshipGameWithTwoPlayers.PlayerNameToMove, PlayerSwapToBoard);
+                PlayerSwapScene(_battleshipGameWithTwoPlayers.PlayerNameToMove, PlayerSwapToBoard);
             }
         }
 
         private string GameFieldProcessTwoPlayerMode(Player player, GameGridTable playerField, GameGridTable enemyField)
         {
-            int[] tileRowAndColumn = getTileRowAndColumn(enemyField);
-            int index = enemyField.grid.Children.IndexOf(enemyField.selectedTile);
+            int[] tileRowAndColumn = GetTileRowAndColumn(enemyField);
+            int index = enemyField.grid.Children.IndexOf(enemyField.SelectedTile);
             int row = tileRowAndColumn[0];
             int column = tileRowAndColumn[1];
-            Position pos = new Position(row, column);
-            battleshipGameWithTwoPlayers.MakeShot(player, pos);
-            Boolean sinking = false;
+            Position shotPosition = new Position(row, column);
+            _battleshipGameWithTwoPlayers.MakeShot(player, shotPosition);
+            bool sinking = false;
 
-            if (Player1Ready)
+            if (_player1Ready)
             {
-                if (battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerOne)
+                if (_battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerOne)
                 {
                     sinking = true;
-                    checkShipsSunk(battleshipGameWithTwoPlayers.PlayerTwoCurrentShips, Player1Board.P2ShipsSunk);
-                    checkShipsSunk(battleshipGameWithTwoPlayers.PlayerTwoCurrentShips, Player2Board.P1ShipsSunk);
+                    CheckShipsSunk(_battleshipGameWithTwoPlayers.PlayerTwoCurrentShips, _player1Board.P2ShipsSunk);
+                    CheckShipsSunk(_battleshipGameWithTwoPlayers.PlayerTwoCurrentShips, _player2Board.P1ShipsSunk);
                 }
             }
             else
             {
-                if (battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerTwo)
+                if (_battleshipGameWithTwoPlayers.SinkingAtPreviousHitOfPlayerTwo)
                 {
                     sinking = true;
-                    checkShipsSunk(battleshipGameWithTwoPlayers.PlayerOneCurrentShips, Player1Board.P1ShipsSunk);
-                    checkShipsSunk(battleshipGameWithTwoPlayers.PlayerOneCurrentShips, Player2Board.P2ShipsSunk);
+                    CheckShipsSunk(_battleshipGameWithTwoPlayers.PlayerOneCurrentShips, _player1Board.P1ShipsSunk);
+                    CheckShipsSunk(_battleshipGameWithTwoPlayers.PlayerOneCurrentShips, _player2Board.P2ShipsSunk);
                 }
             }
 
@@ -440,9 +429,8 @@ namespace BattleshipGame.View
                 playerField[index].Fill = Brushes.DarkBlue;
                 return "-";
             }
-       
         }
-        private void playerSwapConfig(string playerName, RoutedEventHandler routedEventHandler)
+        private void PlayerSwapScene(string playerName, RoutedEventHandler routedEventHandler)
         {
             PlayerSwap playerSwap = new PlayerSwap(playerName);
             playerSwap.ReadyButton.Click += routedEventHandler;
@@ -451,32 +439,32 @@ namespace BattleshipGame.View
 
         private void PlayerReady()
         {
-            if (Player1Ready)
+            if (_player1Ready)
             {
-                Player1Ready = false;
-                Player2Ready = true;
+                _player1Ready = false;
+                _player2Ready = true;
             }
             else
             {
-                Player1Ready = true;
-                Player2Ready = false;
+                _player1Ready = true;
+                _player2Ready = false;
             }
         }
 
         private void SwapContentP2(object sender, RoutedEventArgs e)
         {
-            currentScreen.Content = Player2ShipPlacement;
+            currentScreen.Content = _player2ShipPlacement;
         }
 
         private void PlayerSwapToBoard(object sender, RoutedEventArgs e)
         {
-            if (Player1Ready != false)
+            if (_player1Ready != false)
             {
-                currentScreen.Content = Player1Board;
+                currentScreen.Content = _player1Board;
             }
-            else if (Player2Ready != false)
+            else if (_player2Ready != false)
             {
-                currentScreen.Content = Player2Board;
+                currentScreen.Content = _player2Board;
             }
         }
 
@@ -488,7 +476,7 @@ namespace BattleshipGame.View
 
         #region ScoreBoard
 
-        private void onClickReplay(object sender, RoutedEventArgs e, ScoreBoard board)
+        private void OnClickReplay(object sender, RoutedEventArgs e, ScoreBoard board)
         {
             if (board.ScoreBoardListView.SelectedItems.Count > 0)
             {
@@ -503,14 +491,14 @@ namespace BattleshipGame.View
         #endregion
 
         #region Utils
-        private void onClickBack(object sender, RoutedEventArgs e)
+        private void OnClickBack(object sender, RoutedEventArgs e)
         {
             MainMenu();
         }
 
-        private int[] getTileRowAndColumn(GameGridTable field)
+        private int[] GetTileRowAndColumn(GameGridTable field)
         {
-            int index = field.grid.Children.IndexOf(field.selectedTile);
+            int index = field.grid.Children.IndexOf(field.SelectedTile);
             int row = Grid.GetRow(field.grid.Children[index]);
             int column = Grid.GetColumn(field.grid.Children[index]);
             return new int[] { row, column };
@@ -529,13 +517,13 @@ namespace BattleshipGame.View
             return true;
         }
 
-        private void onClickShot(object sender, RoutedEventArgs e)
+        private void OnClickShot(object sender, RoutedEventArgs e)
         {
-            if (battleshipGameAgainstComputer != null)
+            if (_battleshipGameAgainstComputer != null)
             {
                 AgainstComputer();
             }
-            else if (battleshipGameWithTwoPlayers != null)
+            else if (_battleshipGameWithTwoPlayers != null)
             {
                 AgainstTwoPlayer();
             }
@@ -543,35 +531,35 @@ namespace BattleshipGame.View
 
         private void DefaultSelectedTile(GameGridTable field)
         {
-            field.selectedTile.Stroke = Brushes.Gray;
-            field.selectedTile.StrokeThickness = 1;
-            field.selectedTile = null;
+            field.SelectedTile.Stroke = Brushes.Gray;
+            field.SelectedTile.StrokeThickness = 1;
+            field.SelectedTile = null;
         }
 
         private void BoardUpdate(string player, string guess, string hit)
         {
-            if (battleshipGameAgainstComputer != null)
+            if (_battleshipGameAgainstComputer != null)
             {
-                Player1Board.BoardList.Items.Add(new MyItem
+                _player1Board.BoardList.Items.Add(new MyItem
                 {
-                    Turn = battleshipGameAgainstComputer.NumberOfTurns,
+                    Turn = _battleshipGameAgainstComputer.NumberOfTurns,
                     Player = player,
                     Guess = guess,
                     Hit = hit
                 });
             }
-            else if (battleshipGameWithTwoPlayers != null)
+            else if (_battleshipGameWithTwoPlayers != null)
             {
-                Player1Board.BoardList.Items.Add(new MyItem
+                _player1Board.BoardList.Items.Add(new MyItem
                 {
-                    Turn = battleshipGameWithTwoPlayers.NumberOfTurns,
+                    Turn = _battleshipGameWithTwoPlayers.NumberOfTurns,
                     Player = player,
                     Guess = guess,
                     Hit = hit
                 });
-                Player2Board.BoardList.Items.Add(new MyItem
+                _player2Board.BoardList.Items.Add(new MyItem
                 {
-                    Turn = battleshipGameWithTwoPlayers.NumberOfTurns,
+                    Turn = _battleshipGameWithTwoPlayers.NumberOfTurns,
                     Player = player,
                     Guess = guess,
                     Hit = hit
@@ -579,7 +567,7 @@ namespace BattleshipGame.View
             }
         }
 
-        private void checkShipsSunk(List<Ship> ships, StackPanel shipsSunkPanel)
+        private void CheckShipsSunk(List<Ship> ships, StackPanel shipsSunkPanel)
         {
             foreach (Ship ship in ships)
             {
@@ -607,7 +595,8 @@ namespace BattleshipGame.View
             public string Hit { get; set; }
         }
 
-        private void SaveMatchScore(Player p1, Player p2, string p1Hits, string p2Hits, int numberOfTurns, string winnerPlayer){
+        private void SaveMatchScore(Player p1, Player p2, string p1Hits, string p2Hits, int numberOfTurns, string winnerPlayer)
+        {
             MatchScore score = new MatchScore()
             {
                 PlayerName1 = p1.PlayerName,
@@ -618,9 +607,31 @@ namespace BattleshipGame.View
                 WinnerPlayerName = winnerPlayer
             };
 
-            MatchScoreRepository.StoreMatchScore(score);
+            var background = new Thread(() => MatchScoreRepository.StoreMatchScore(score));
+            background.Start();
         }
         private void SaveAllMatchDataAgainstComputer(BattleshipGameAgainstComputer game)
+        {
+            MatchSaveAndReplay match = new MatchSaveAndReplay()
+            {
+                PlayerName1 = game.PlayerOne.PlayerName,
+                PlayerName2 = game.PlayerTwo.PlayerName,
+                NumberOfTurns = game.NumberOfTurns,
+                Player1Guesses = string.Join(";", game.PlayerOneGuesses.Select(o => o.ToString())),
+                Player2Guesses = string.Join(";", game.PlayerTwoGuesses.Select(o => o.ToString())),
+                Player1OriginalShips = string.Join(";", game.PlayerOneOriginalShips.Select(o => o.ToString())),
+                Player2OriginalShips = string.Join(";", game.PlayerTwoOriginalShips.Select(o => o.ToString())),
+                Player1CurrentShips = string.Join(";", game.PlayerOneCurrentShips.Select(o => o.ToString())),
+                Player2CurrentShips = string.Join(";", game.PlayerTwoCurrentShips.Select(o => o.ToString())),
+                PlayerToStart = game.PlayerToStart,
+                Type = MatchType.Replay,
+            };
+
+            var background = new Thread(() => MatchSaveAndReplayRepository.StoreMatchSaveAndReplay(match));
+            background.Start();
+        }
+
+        private void SaveAllMatchDataTwoPlayer(BattleshipGameWithTwoPlayers game)
         {
             MatchSaveAndReplay match = new MatchSaveAndReplay()
             {
@@ -637,29 +648,10 @@ namespace BattleshipGame.View
                 Type = MatchType.Replay,
             };
 
-            MatchSaveAndReplayRepository.StoreMatchSaveAndReplay(match);
+            var background = new Thread(() => MatchSaveAndReplayRepository.StoreMatchSaveAndReplay(match));
+            background.Start();
         }
 
-        private void SaveAllMatchDataTwoPlayer(BattleshipGameWithTwoPlayers game)
-        {
-            MatchSaveAndReplay match = new MatchSaveAndReplay()
-            {
-               PlayerName1 = game.PlayerOne.PlayerName,
-               PlayerName2 = game.PlayerTwo.PlayerName,
-               NumberOfTurns = game.NumberOfTurns,
-               Player1Guesses = string.Join(";",game.PlayerOneGuesses.Select(o => o.ToString())),
-               Player2Guesses = string.Join(";", game.PlayerTwoGuesses.Select(o => o.ToString())),
-               Player1OriginalShips = string.Join(";", game.PlayerOneOriginalShips.Select(o => o.ToString())),
-               Player2OriginalShips = string.Join(";", game.PlayerTwoOriginalShips.Select(o => o.ToString())),
-               Player1CurrentShips = string.Join(";", game.PlayerOneCurrentShips.Select(o => o.ToString())),
-               Player2CurrentShips = string.Join(";", game.PlayerTwoCurrentShips.Select(o => o.ToString())),
-               PlayerToStart = game.PlayerOne.PlayerName,
-               Type = MatchType.Replay,
-            };
-
-            MatchSaveAndReplayRepository.StoreMatchSaveAndReplay(match);
-        }
-        
         #endregion
     }
 }

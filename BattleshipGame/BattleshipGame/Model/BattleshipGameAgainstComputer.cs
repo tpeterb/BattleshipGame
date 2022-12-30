@@ -320,6 +320,7 @@ namespace BattleshipGame.Model
             {
                 PlayerNameToMove = PlayerTwo.PlayerName;
             }
+            PlayerToStart = PlayerNameToMove;
         }
     }
 }

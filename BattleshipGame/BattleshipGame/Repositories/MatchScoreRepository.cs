@@ -1,22 +1,19 @@
-﻿using BattleshipGame.Repositories.Contexts;
-using BattleshipGame.Repositories.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using BattleshipGame.Repositories.Contexts;
+using BattleshipGame.Repositories.Models;
 
 namespace BattleshipGame.Repositories
 {
-    public class MatchScoreRepository
+    public static class MatchScoreRepository
     {
-
         public static IList<MatchScore> GetMatchScores()
         {
             var database = new DatabaseContext();
 
             using (database)
             {
-                return database.matchScores.ToList();
+                return database.MatchScores.ToList();
             }
         }
 
@@ -26,7 +23,7 @@ namespace BattleshipGame.Repositories
 
             using (database)
             {
-                database.matchScores.Add(match);
+                database.MatchScores.Add(match);
 
                 database.SaveChanges();
             }

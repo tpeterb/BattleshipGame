@@ -33,6 +33,8 @@ namespace BattleshipGame.Model
 
         public string PlayerNameToMove { get; set; }
 
+        public string PlayerToStart { get; set; }
+
         public bool SinkingAtPreviousHitOfPlayerOne { get; set; }
 
         public bool SinkingAtPreviousHitOfPlayerTwo { get; set; }
