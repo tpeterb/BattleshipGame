@@ -245,18 +245,22 @@ namespace BattleshipGame.Model
             else
             {
                 Position lastComputerTarget = PlayerTwoGuesses.Last();
-                Position positionToTheLeftOfPreviousTarget = lastComputerTarget.GetPositionInDirection(Direction.Left);
-                Position positionToTheRightOfPreviousTarget = lastComputerTarget.GetPositionInDirection(Direction.Right);
-                Position positionAboveThePreviousTarget = lastComputerTarget.GetPositionInDirection(Direction.Up);
-                Position positionBelowThePreviousTarget = lastComputerTarget.GetPositionInDirection(Direction.Down);
-                if (PlayerTwoGuesses.Contains(positionToTheLeftOfPreviousTarget)
-                && PlayerTwoGuesses.Contains(positionToTheRightOfPreviousTarget)
-                && PlayerTwoGuesses.Contains(positionAboveThePreviousTarget)
-                && PlayerTwoGuesses.Contains(positionBelowThePreviousTarget))
+                List<Position> adjacentPositions = new List<Position>();
+                adjacentPositions.Add(lastComputerTarget.GetPositionInDirection(Direction.Left));
+                adjacentPositions.Add(lastComputerTarget.GetPositionInDirection(Direction.Right));
+                adjacentPositions.Add(lastComputerTarget.GetPositionInDirection(Direction.Up));
+                adjacentPositions.Add(lastComputerTarget.GetPositionInDirection(Direction.Down));
+
+                foreach (var position in adjacentPositions)
                 {
-                    return CreateRandomComputerShot();
+                    if (IsPositionValid(position)
+                        && !PlayerTwoGuesses.Contains(position))
+                    {
+                        return CreateComputerShotNextToPreviousHit();
+                    }
                 }
-                return CreateComputerShotNextToPreviousHit();
+
+                return CreateRandomComputerShot();
             }
         }
 

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
 O:\Tóth Péter Balázs\BattleshipGame\BattleshipGame\BattleshipGame\App.xaml
-1-1711142684
+11-243209133
 
-22-694868119
-213-1095916972
-View\MainWindow.xaml;
+34802454369
+214-830268034
+View\AIShips.xaml;View\Game.xaml;View\GameGridTable.xaml;View\MainMenu.xaml;View\MainWindow.xaml;View\NewGame.xaml;View\PlayerSwap.xaml;View\ReplayGame.xaml;View\ReplayMenu.xaml;View\ScoreBoard.xaml;View\ShipPlacement.xaml;
 
 False
 
