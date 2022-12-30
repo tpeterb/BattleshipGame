@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Loaded="UserControl_Loaded">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <StackPanel Margin="0 0 0 40">
+        <StackPanel Margin="0 0 0 40" Orientation="Horizontal">
+            <Button x:Name="Back" Style="{DynamicResource MenuButtonStyle}" Content="Back" FontFamily="Ink Free" FontSize="24" FontWeight="Bold" Height="50" Cursor="Hand" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             <TextBlock Text="" FontSize="24" TextAlignment="Center" x:Name="playerNameTextBlock"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal">

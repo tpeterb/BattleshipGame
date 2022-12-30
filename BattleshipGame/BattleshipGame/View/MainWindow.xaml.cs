@@ -470,10 +470,6 @@ namespace BattleshipGame.View
 
         #endregion
 
-        #region LoadGame
-
-        #endregion
-
         #region ScoreBoard
 
         private void OnClickReplay(object sender, RoutedEventArgs e, ScoreBoard board)
@@ -485,6 +481,7 @@ namespace BattleshipGame.View
 
                 ReplayGame game = new ReplayGame(match);
                 currentScreen.Content = game;
+                game.Back.Click += OnClickBack;
             }
         }
 

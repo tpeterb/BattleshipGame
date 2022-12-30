@@ -5,8 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BattleshipGame.View"
         mc:Ignorable="d">
-    
-    <Grid x:Name="ScoreBoardGrid">
+
+    <UserControl.Resources>
+        <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Foreground" Value="Black" />
+                </Trigger>
+                <Trigger Property="IsSelected" Value="true">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Foreground" Value="Black" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid x:Name="ScoreBoardGrid" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="300"></RowDefinition>
@@ -14,11 +29,11 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"></ColumnDefinition>
-            <ColumnDefinition Width="700"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="50"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Content="Scoreboard" Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF000D10" Background="White"/>
-        <ListView x:Name="ScoreBoardListView" FontFamily="Ink Free" FontWeight="Bold" FontSize="14" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Foreground="White" Background="#FF000D10">
+        <ListView x:Name="ScoreBoardListView" FontFamily="Ink Free" FontWeight="Bold" FontSize="14" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Foreground="White" Background="#FF000D10" ItemContainerStyle="{StaticResource ListViewItemStyle}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="100" DisplayMemberBinding="{Binding Id}">

@@ -18,8 +18,6 @@ namespace BattleshipGame.Repositories.Models
         public string Player2OriginalShips { get; set; }
         public string Player1CurrentShips { get; set; }
         public string Player2CurrentShips { get; set; }
-        public string Player1CurrentShipsType { get; set; }
-        public string Player2CurrentShipsType { get; set; }
         public string PlayerToStart { get; set; }
         public MatchType Type { get; set; }
     }
